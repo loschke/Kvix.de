@@ -1,0 +1,39 @@
+---
+import "../style/global.css";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="/fonts/fonts.css" />
+		<meta name="generator" content={Astro.generator} />
+		<title>My Profile</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<script is:inline>
+	// Check for saved dark mode preference or system preference
+	function updateTheme() {
+		if (
+			localStorage.theme === "dark" ||
+			(!("theme" in localStorage) &&
+				window.matchMedia("(prefers-color-scheme: dark)").matches)
+		) {
+			document.documentElement.classList.add("dark");
+		} else {
+			document.documentElement.classList.remove("dark");
+		}
+	}
+
+	// Run on initial load
+	updateTheme();
+
+	// Listen for storage changes (in case of multiple tabs)
+	window.addEventListener("storage", updateTheme);
+</script>

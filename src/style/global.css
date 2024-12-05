@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    /* Base styles */
+    html {
+        font-family: "FF Clan Pro", system-ui, -apple-system, sans-serif;
+        @apply scroll-smooth antialiased;
+    }
+
+    body {
+        @apply bg-base text-white min-h-screen overflow-x-hidden;
+    }
+
+    /* Headings */
+    h1 {
+        font-family: "FF Clan Pro", system-ui, -apple-system, sans-serif;
+        @apply font-black text-white;
+    }
+
+    h2 {
+        font-family: "FF Clan Pro", system-ui, -apple-system, sans-serif;
+        @apply font-bold text-white;
+    }
+
+    h3 {
+        font-family: "FF Clan Pro", system-ui, -apple-system, sans-serif;
+        @apply font-normal text-white;
+    }
+
+    /* Regular text */
+    p {
+        font-family: "FF Clan Pro", system-ui, -apple-system, sans-serif;
+        @apply font-light text-white leading-tight;
+    }
+}
+
+/* Components */
+@layer components {
+    .social-link {
+        @apply text-white/60 hover:text-white transition-colors duration-300;
+    }
+}
