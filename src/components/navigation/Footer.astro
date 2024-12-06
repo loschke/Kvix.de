@@ -1,0 +1,96 @@
+---
+import SocialIcons from "./SocialIcons.astro";
+
+const currentYear = new Date().getFullYear();
+
+const footerLinks = [
+    {
+        title: "Navigation",
+        links: [
+            { label: "Über mich", href: "/about" },
+            { label: "Projekte", href: "/projekte" },
+            { label: "Blog", href: "/blog" },
+            { label: "Playground", href: "/playground" },
+            { label: "Guides", href: "/guides" },
+            { label: "Kontakt", href: "/kontakt" },
+        ],
+    },
+    {
+        title: "Rechtliches",
+        links: [
+            { label: "Impressum", href: "/impressum" },
+            { label: "Datenschutz", href: "/datenschutz" },
+            { label: "AGB", href: "/agb" },
+        ],
+    },
+];
+---
+
+<footer class="mt-auto border-t border-white/10">
+    <div class="container-padding py-16">
+        <div class="max-container">
+            <!-- Top Section -->
+            <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-4 mb-16">
+                <!-- Brand -->
+                <div class="lg:col-span-2">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-lg font-bold"
+                        >
+                            RL
+                        </div>
+                        <span class="text-xl font-medium">Rico Loschke</span>
+                    </div>
+                    <p class="text-white/80 max-w-md">
+                        Experte für künstliche Intelligenz und digitale
+                        Transformation. Ich unterstütze Unternehmen dabei, das
+                        volle Potenzial von KI zu erschließen.
+                    </p>
+                    <div class="mt-6">
+                        <SocialIcons />
+                    </div>
+                </div>
+
+                <!-- Links -->
+                {
+                    footerLinks.map((section) => (
+                        <div>
+                            <h3 class="font-bold text-lg mb-4">
+                                {section.title}
+                            </h3>
+                            <ul class="space-y-3">
+                                {section.links.map((link) => (
+                                    <li>
+                                        <a
+                                            href={link.href}
+                                            class="text-white/70 hover:text-white transition-colors"
+                                        >
+                                            {link.label}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))
+                }
+            </div>
+
+            <!-- Bottom Section -->
+            <div
+                class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4"
+            >
+                <div class="text-white/60 text-sm">
+                    © {currentYear} Rico Loschke. Alle Rechte vorbehalten.
+                </div>
+                <div class="text-white/60 text-sm">
+                    <a
+                        href="mailto:kontakt@rico-loschke.de"
+                        class="hover:text-white transition-colors"
+                    >
+                        kontakt@rico-loschke.de
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

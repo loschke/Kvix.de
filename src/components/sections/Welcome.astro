@@ -1,0 +1,72 @@
+---
+import Button from "../../components/ui/Button.astro";
+---
+
+<section class="relative h-screen overflow-hidden z-0">
+    <!-- Background Animation -->
+    <div class="absolute inset-0 z-0">
+        <!-- Simple Gradient Animation -->
+        <div
+            class="absolute inset-0 bg-gradient-to-br from-primary-dark via-base to-accent opacity-40 animate-gradient"
+        >
+        </div>
+    </div>
+
+    <div
+        class="flex flex-col justify-center h-full container-padding relative z-10"
+    >
+        <div class="max-container">
+            <div class="ml-auto max-w-4xl text-right">
+                <h1 class="text-hero font-black mb-8">
+                    <span class="text-primary block">Gemeinsam</span>
+                    <span class="text-primary block">neues schaffen</span>
+                    <span class="text-primary block">im Dialog</span>
+                </h1>
+                <div class="space-y-1">
+                    <p class="text-hero-sub font-light">mit Künstlicher</p>
+                    <p class="text-hero-sub font-light">Intelligenz</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="absolute bottom-8 inset-x-0 container-padding z-20">
+        <div class="max-container flex justify-between items-center">
+            <div class="space-y-1">
+                <h2 class="text-4xl font-bold tracking-tight">Rico Loschke</h2>
+                <p class="text-white text-xl tracking-wide">
+                    Vermittelt ganzheitliches Wissen zu generativer KI
+                </p>
+            </div>
+            <Button href="/projekte"> Kontakt aufnehmen </Button>
+        </div>
+    </div>
+</section>
+
+<style>
+    section {
+        isolation: isolate;
+    }
+
+    .animate-gradient {
+        animation: gradient 20s ease infinite;
+        background-size: 200% 200%;
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    :global(.dark) .animate-gradient {
+        filter: brightness(0.8) saturate(0.9);
+    }
+</style>

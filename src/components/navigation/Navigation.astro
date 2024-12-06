@@ -1,0 +1,113 @@
+---
+import SocialIcons from "../navigation/SocialIcons.astro";
+
+const navItems = [
+    { href: "/about", label: "About" },
+    { href: "/projekte", label: "Projekte" },
+    { href: "/blog", label: "Blog" },
+    { href: "/playground", label: "Playground" },
+    { href: "/guides", label: "Guides" },
+];
+
+// Check if we're on the homepage
+const isHomepage = Astro.url.pathname === "/";
+---
+
+<header class="fixed top-0 inset-x-0 z-50" id="main-header">
+    <div
+        class="absolute inset-0 transition-all duration-300 border-b border-transparent"
+        id="nav-backdrop"
+        style="background-color: rgba(var(--background-rgb), var(--bg-opacity, 0)); backdrop-filter: blur(var(--blur-px, 0));"
+    >
+    </div>
+    <div class="container-padding py-6 relative">
+        <div class="max-container flex justify-between items-center">
+            <!-- Profile Logo -->
+            <a href="/" class="flex items-center gap-4 group relative">
+                <div
+                    class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-lg font-bold shadow-lg"
+                    aria-hidden="true"
+                >
+                    RL
+                </div>
+                <span
+                    class="text-xl font-medium tracking-wide text-white/90 group-hover:text-white transition-colors duration-300"
+                >
+                    Hi, ich bin Rico
+                </span>
+            </a>
+
+            <!-- Navigation and Social Icons -->
+            <div class="flex items-center relative">
+                <!-- Navigation Menu -->
+                <nav class="flex gap-10 mr-16" aria-label="Main navigation">
+                    {
+                        navItems.map(({ href, label }) => (
+                            <a
+                                href={href}
+                                class="nav-link relative text-white/80 hover:text-white transition-colors"
+                            >
+                                {label}
+                            </a>
+                        ))
+                    }
+                </nav>
+
+                <!-- Social Icons -->
+                <div class="border-l border-white/10 pl-16">
+                    <SocialIcons />
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<style>
+    .nav-link {
+        position: relative;
+        z-index: 1;
+    }
+
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: currentColor;
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+        transform: scaleX(1);
+    }
+
+    #nav-backdrop {
+        --background-rgb: 17, 24, 39;
+    }
+
+    #nav-backdrop.scrolled {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+</style>
+
+<script>
+    const backdrop = document.getElementById("nav-backdrop");
+
+    const updateNavigation = () => {
+        if (window.scrollY > 50) {
+            backdrop?.style.setProperty("--bg-opacity", "0.5");
+            backdrop?.style.setProperty("--blur-px", "8px");
+            backdrop?.classList.add("scrolled");
+        } else {
+            backdrop?.style.setProperty("--bg-opacity", "0");
+            backdrop?.style.setProperty("--blur-px", "0px");
+            backdrop?.classList.remove("scrolled");
+        }
+    };
+
+    window.addEventListener("scroll", updateNavigation);
+    updateNavigation(); // Initial check
+</script>

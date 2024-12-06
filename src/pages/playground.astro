@@ -1,0 +1,91 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="KI Playground - Rico Loschke"
+    description="Experimentieren Sie mit verschiedenen KI-Anwendungen und Demos"
+>
+    <section class="container-padding">
+        <div class="max-container">
+            <h1 class="text-4xl md:text-5xl font-bold mb-8">KI Playground</h1>
+            <p class="text-xl mb-12 max-w-3xl">
+                Entdecken Sie interaktive Demos und Experimente im Bereich
+                künstlicher Intelligenz. Hier können Sie verschiedene
+                KI-Technologien praktisch erleben und testen.
+            </p>
+
+            <div class="grid gap-8 md:grid-cols-2">
+                <!-- Demo Card 1 -->
+                <article
+                    class="bg-background-light/5 rounded-xl p-6 border border-white/10"
+                >
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">Text-Analyse</h2>
+                        <span
+                            class="px-3 py-1 bg-primary/10 rounded-full text-sm"
+                            >NLP</span
+                        >
+                    </div>
+                    <p class="text-white/80 mb-6">
+                        Testen Sie unsere KI-gestützte Textanalyse für Stimmung,
+                        Schlüsselwörter und semantische Bedeutung.
+                    </p>
+                    <div class="space-y-4">
+                        <textarea
+                            class="w-full h-32 bg-background-dark/50 rounded-lg p-4 border border-white/10 focus:border-primary/50 focus:outline-none"
+                            placeholder="Geben Sie hier Ihren Text ein..."
+                        ></textarea>
+                        <button
+                            class="w-full py-3 px-6 bg-primary hover:bg-primary-dark transition-colors rounded-lg font-medium"
+                        >
+                            Analysieren
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Demo Card 2 -->
+                <article
+                    class="bg-background-light/5 rounded-xl p-6 border border-white/10"
+                >
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold">Bild-Erkennung</h2>
+                        <span
+                            class="px-3 py-1 bg-primary/10 rounded-full text-sm"
+                            >Computer Vision</span
+                        >
+                    </div>
+                    <p class="text-white/80 mb-6">
+                        Laden Sie ein Bild hoch und lassen Sie unsere KI die
+                        Objekte, Szenen und Kontexte erkennen.
+                    </p>
+                    <div class="space-y-4">
+                        <div
+                            class="w-full aspect-video bg-background-dark/50 rounded-lg border border-white/10 flex items-center justify-center"
+                        >
+                            <span class="text-white/60"
+                                >Bild hierher ziehen oder klicken zum Hochladen</span
+                            >
+                        </div>
+                        <button
+                            class="w-full py-3 px-6 bg-primary hover:bg-primary-dark transition-colors rounded-lg font-medium"
+                        >
+                            Analysieren
+                        </button>
+                    </div>
+                </article>
+            </div>
+
+            <div
+                class="mt-12 p-6 bg-background-light/5 rounded-xl border border-white/10"
+            >
+                <h2 class="text-2xl font-bold mb-4">Hinweis</h2>
+                <p class="text-white/80">
+                    Diese Demos dienen zur Veranschaulichung der Möglichkeiten
+                    moderner KI-Technologien. Für spezifische Anwendungsfälle
+                    und individuelle Lösungen kontaktieren Sie mich gerne.
+                </p>
+            </div>
+        </div>
+    </section>
+</Layout>

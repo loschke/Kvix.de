@@ -1,0 +1,111 @@
+---
+const areas = [
+    {
+        title: "Über mich",
+        description:
+            "Lern mich kennen und erfahre, warum ich mich dafür einsetze, KI verständlich und zugänglich für alle zu machen.",
+        icon: "👨‍💻",
+        href: "/about",
+        gradient: "from-primary/20 to-primary-dark/20",
+    },
+    {
+        title: "Projekte",
+        description:
+            "Entdecke spannende Beispiele, die dir zeigen, was mit KI heute schon möglich ist und was wir daraus lernen können.",
+        icon: "🚀",
+        href: "/projekte",
+        gradient: "from-blue-500/20 to-blue-700/20",
+    },
+    {
+        title: "Blog",
+        description:
+            "Hier teile ich meine Erkenntnisse und Erfahrungen rund um KI – verständlich erklärt und mit praktischen Beispielen.",
+        icon: "✍️",
+        href: "/blog",
+        gradient: "from-purple-500/20 to-purple-700/20",
+    },
+    {
+        title: "Playground",
+        description:
+            "Probiere selbst verschiedene KI-Anwendungen aus und verstehe durch eigene Erfahrung, wie sie funktionieren.",
+        icon: "🎮",
+        href: "/playground",
+        gradient: "from-green-500/20 to-green-700/20",
+    },
+    {
+        title: "Guides",
+        description:
+            "Schritt-für-Schritt Anleitungen, die dir helfen, KI besser zu verstehen und sinnvoll einzusetzen.",
+        icon: "📚",
+        href: "/guides",
+        gradient: "from-yellow-500/20 to-yellow-700/20",
+    },
+    {
+        title: "Kontakt",
+        description:
+            "Du hast Fragen oder möchtest mehr über ein bestimmtes KI-Thema erfahren? Ich freue mich auf den Austausch mit dir.",
+        icon: "💬",
+        href: "/kontakt",
+        gradient: "from-rose-500/20 to-rose-700/20",
+    },
+];
+---
+
+<section class="py-24 container-padding relative">
+    <div class="max-container">
+        <h2 class="text-4xl md:text-5xl font-bold mb-6 text-center">
+            Entdecke die <span class="text-primary">Welt der KI</span>
+        </h2>
+        <p class="text-xl text-white/80 text-center mb-16 max-w-2xl mx-auto">
+            Lass uns gemeinsam KI verstehen, ausprobieren und sinnvoll nutzen –
+            mit praktischen Beispielen und verständlichen Erklärungen.
+        </p>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {
+                areas.map((area) => (
+                    <a
+                        href={area.href}
+                        class="group block p-8 rounded-2xl border border-white/10 bg-gradient-to-br hover:border-primary/50 transition-all duration-300"
+                        class:list={[area.gradient]}
+                    >
+                        <div class="flex items-start gap-4">
+                            <span class="text-4xl">{area.icon}</span>
+                            <div>
+                                <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                                    {area.title}
+                                </h3>
+                                <p class="text-white/80 leading-relaxed">
+                                    {area.description}
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                ))
+            }
+        </div>
+
+        <div class="mt-16 text-center">
+            <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                Interessiert an KI? Lass uns gemeinsam lernen und Erfahrungen
+                austauschen.
+            </p>
+            <a
+                href="/kontakt"
+                class="inline-block mt-8 px-8 py-4 bg-primary hover:bg-primary-dark transition-colors rounded-lg font-medium"
+            >
+                Schreib mir
+            </a>
+        </div>
+    </div>
+
+    <!-- Decorative Elements -->
+    <div
+        class="absolute top-1/2 -translate-y-1/2 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
+    >
+    </div>
+    <div
+        class="absolute top-1/2 -translate-y-1/2 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
+    >
+    </div>
+</section>
