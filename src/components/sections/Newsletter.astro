@@ -1,0 +1,44 @@
+---
+---
+
+<section class="py-24 container-padding bg-gradient-to-b from-base/50 to-transparent">
+    <div class="max-container">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 via-base to-accent/20 p-8 md:p-12">
+            <div class="relative z-10 max-w-2xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    Bleib auf dem Laufenden
+                </h2>
+                <p class="text-xl text-white/80 mb-8">
+                    Erhalte regelmäßig praktische Tipps, aktuelle Entwicklungen und exklusive Einblicke in die Welt der KI.
+                </p>
+
+                <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto" action="/api/newsletter" method="POST">
+                    <input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Deine E-Mail-Adresse" 
+                        required
+                        class="flex-1 px-6 py-4 rounded-lg bg-base-light/10 border border-white/10 
+                               placeholder:text-white/50 focus:outline-none focus:border-primary/50
+                               backdrop-blur-sm"
+                    />
+                    <button 
+                        type="submit"
+                        class="px-8 py-4 bg-primary hover:bg-primary-dark rounded-lg font-medium 
+                               transition-colors duration-300 whitespace-nowrap"
+                    >
+                        Anmelden
+                    </button>
+                </form>
+
+                <p class="mt-4 text-sm text-white/60">
+                    Ich respektiere deine Privatsphäre. Abmeldung jederzeit möglich.
+                </p>
+            </div>
+
+            <!-- Decorative elements -->
+            <div class="absolute top-0 left-1/4 w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-accent/20 rounded-full blur-3xl"></div>
+        </div>
+    </div>
+</section>

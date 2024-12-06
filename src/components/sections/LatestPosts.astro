@@ -1,0 +1,84 @@
+---
+// This would typically fetch from your CMS or blog system
+const latestPosts = [
+    {
+        title: "Einführung in ChatGPT",
+        excerpt: "Ein Grundlagenguide für Einsteiger: Was ist ChatGPT und wie kann man es effektiv nutzen?",
+        date: "2024-01-15",
+        readTime: "5 min",
+        href: "/blog/einfuehrung-chatgpt"
+    },
+    {
+        title: "KI im Alltag",
+        excerpt: "Praktische Beispiele, wie künstliche Intelligenz unseren Alltag bereits heute verbessert.",
+        date: "2024-01-10",
+        readTime: "4 min",
+        href: "/blog/ki-im-alltag"
+    },
+    {
+        title: "Prompt Engineering",
+        excerpt: "Lerne die Kunst des effektiven Prompting für bessere KI-Ergebnisse.",
+        date: "2024-01-05",
+        readTime: "6 min",
+        href: "/blog/prompt-engineering"
+    }
+];
+---
+
+<section class="py-24 container-padding bg-gradient-to-b from-transparent to-base/50">
+    <div class="max-container">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                Aktuelle <span class="text-primary">Einblicke</span>
+            </h2>
+            <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                Entdecke die neuesten Artikel und Guides rund um KI und ihre praktische Anwendung.
+            </p>
+        </div>
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {latestPosts.map(post => (
+                <a href={post.href} class="group">
+                    <article class="h-full p-6 rounded-xl bg-base-light/10 backdrop-blur-sm border border-white/5 
+                                  transition-all duration-300 hover:border-primary/20 hover:bg-base-light/20">
+                        <div class="flex items-center gap-4 text-sm text-white/60 mb-4">
+                            <time datetime={post.date}>
+                                {new Date(post.date).toLocaleDateString('de-DE', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                })}
+                            </time>
+                            <span>•</span>
+                            <span>{post.readTime}</span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-bold mb-3 text-white/90 group-hover:text-primary transition-colors">
+                            {post.title}
+                        </h3>
+                        
+                        <p class="text-white/70 leading-relaxed mb-4">
+                            {post.excerpt}
+                        </p>
+                        
+                        <span class="inline-flex items-center text-primary font-medium">
+                            Weiterlesen
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                    </article>
+                </a>
+            ))}
+        </div>
+
+        <div class="mt-12 text-center">
+            <a href="/blog" class="inline-flex items-center px-6 py-3 text-lg font-medium text-white/90 hover:text-primary transition-colors">
+                Alle Artikel ansehen
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>

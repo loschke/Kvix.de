@@ -1,0 +1,112 @@
+---
+const guides = [
+    {
+        title: "Einführung in ChatGPT",
+        description: "Lerne die Grundlagen und fortgeschrittene Techniken für effektive Prompts",
+        color: "from-[#1a2f38] to-[#0f1922]",
+        href: "/guides/chatgpt-einfuehrung"
+    },
+    {
+        title: "KI im Content Marketing",
+        description: "Wie du KI für bessere Texte und Content-Strategien nutzt",
+        color: "from-[#432843] to-[#2d1b2d]",
+        href: "/guides/ki-content-marketing"
+    },
+    {
+        title: "Bildgenerierung mit KI",
+        description: "Meistere Midjourney und Stable Diffusion für kreative Projekte",
+        color: "from-[#3d2835] to-[#261720]",
+        href: "/guides/ki-bildgenerierung"
+    },
+    {
+        title: "KI-Assistenten entwickeln",
+        description: "Erstelle maßgeschneiderte KI-Assistenten für deine Anforderungen",
+        color: "from-[#2d3b4a] to-[#1a232d]",
+        href: "/guides/ki-assistenten"
+    }
+];
+---
+
+<section class="py-24 container-padding">
+    <div class="max-container">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                KI <span class="text-primary">Guides</span>
+            </h2>
+            <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                Praxisnahe Anleitungen und Tutorials für den erfolgreichen Einsatz von KI
+            </p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+            {guides.map((guide, index) => (
+                <a 
+                    href={guide.href}
+                    class="group relative h-[280px] overflow-hidden rounded-xl transition-transform duration-300 hover:-translate-y-1"
+                    style={`animation: fadeSlideUp 600ms ${index * 100}ms backwards`}
+                >
+                    <div class={`absolute inset-0 bg-gradient-to-br ${guide.color}`}></div>
+                    
+                    {/* Animated gradient overlay */}
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/20 opacity-0 
+                                transition-opacity duration-500 group-hover:opacity-100"></div>
+                    
+                    {/* Content */}
+                    <div class="relative h-full p-8 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-3 text-white/90">
+                                {guide.title}
+                            </h3>
+                            <p class="text-white/70 leading-relaxed">
+                                {guide.description}
+                            </p>
+                        </div>
+                        
+                        <div class="flex items-center text-primary/90 font-medium">
+                            Zum Guide
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+                                 class="w-5 h-5 ml-2 transform transition-transform duration-300 group-hover:translate-x-1" 
+                                 viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" 
+                                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" 
+                                      clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    {/* Decorative elements */}
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl 
+                                transform translate-x-16 -translate-y-16"></div>
+                    <div class="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl 
+                                transform -translate-x-16 translate-y-16"></div>
+                </a>
+            ))}
+        </div>
+
+        <div class="mt-12 text-center">
+            <a href="/guides" 
+               class="inline-flex items-center px-6 py-3 text-lg font-medium text-white/90 
+                      hover:text-primary transition-colors">
+                Alle Guides ansehen
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" 
+                          d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" 
+                          clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    @keyframes fadeSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

@@ -6,7 +6,9 @@ const areas = [
             "Lern mich kennen und erfahre, warum ich mich dafür einsetze, KI verständlich und zugänglich für alle zu machen.",
         icon: "👨‍💻",
         href: "/about",
-        gradient: "from-primary/20 to-primary-dark/20",
+        gradient: "from-primary/25 via-primary/15 to-primary/25",
+        borderColor: "primary",
+        hoverColor: "text-pink-400"
     },
     {
         title: "Projekte",
@@ -14,7 +16,9 @@ const areas = [
             "Entdecke spannende Beispiele, die dir zeigen, was mit KI heute schon möglich ist und was wir daraus lernen können.",
         icon: "🚀",
         href: "/projekte",
-        gradient: "from-blue-500/20 to-blue-700/20",
+        gradient: "from-blue-500/25 via-blue-600/15 to-blue-500/25",
+        borderColor: "blue-500",
+        hoverColor: "text-blue-400"
     },
     {
         title: "Blog",
@@ -22,7 +26,9 @@ const areas = [
             "Hier teile ich meine Erkenntnisse und Erfahrungen rund um KI – verständlich erklärt und mit praktischen Beispielen.",
         icon: "✍️",
         href: "/blog",
-        gradient: "from-purple-500/20 to-purple-700/20",
+        gradient: "from-purple-500/25 via-purple-600/15 to-purple-500/25",
+        borderColor: "purple-500",
+        hoverColor: "text-purple-400"
     },
     {
         title: "Playground",
@@ -30,7 +36,9 @@ const areas = [
             "Probiere selbst verschiedene KI-Anwendungen aus und verstehe durch eigene Erfahrung, wie sie funktionieren.",
         icon: "🎮",
         href: "/playground",
-        gradient: "from-green-500/20 to-green-700/20",
+        gradient: "from-green-500/25 via-green-600/15 to-green-500/25",
+        borderColor: "green-500",
+        hoverColor: "text-green-400"
     },
     {
         title: "Guides",
@@ -38,7 +46,9 @@ const areas = [
             "Schritt-für-Schritt Anleitungen, die dir helfen, KI besser zu verstehen und sinnvoll einzusetzen.",
         icon: "📚",
         href: "/guides",
-        gradient: "from-yellow-500/20 to-yellow-700/20",
+        gradient: "from-yellow-500/25 via-yellow-600/15 to-yellow-500/25",
+        borderColor: "yellow-500",
+        hoverColor: "text-yellow-400"
     },
     {
         title: "Kontakt",
@@ -46,10 +56,60 @@ const areas = [
             "Du hast Fragen oder möchtest mehr über ein bestimmtes KI-Thema erfahren? Ich freue mich auf den Austausch mit dir.",
         icon: "💬",
         href: "/kontakt",
-        gradient: "from-rose-500/20 to-rose-700/20",
+        gradient: "from-rose-500/25 via-rose-600/15 to-rose-500/25",
+        borderColor: "rose-500",
+        hoverColor: "text-rose-400"
     },
 ];
 ---
+
+<style>
+    @keyframes borderPulse {
+        0% {
+            border-color: rgba(var(--border-color-rgb), 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        50% {
+            border-color: rgba(var(--border-color-rgb), 0.8);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        100% {
+            border-color: rgba(var(--border-color-rgb), 0.2);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    }
+
+    .card {
+        border: 2px solid transparent;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        animation: borderPulse 2.5s ease-in-out infinite;
+        transform: translateY(-2px);
+    }
+
+    /* Color variables for different cards */
+    .card[data-color="primary"] {
+        --border-color-rgb: 236, 72, 153;
+    }
+    .card[data-color="blue-500"] {
+        --border-color-rgb: 59, 130, 246;
+    }
+    .card[data-color="purple-500"] {
+        --border-color-rgb: 168, 85, 247;
+    }
+    .card[data-color="green-500"] {
+        --border-color-rgb: 34, 197, 94;
+    }
+    .card[data-color="yellow-500"] {
+        --border-color-rgb: 234, 179, 8;
+    }
+    .card[data-color="rose-500"] {
+        --border-color-rgb: 244, 63, 94;
+    }
+</style>
 
 <section class="py-24 container-padding relative">
     <div class="max-container">
@@ -66,13 +126,17 @@ const areas = [
                 areas.map((area) => (
                     <a
                         href={area.href}
-                        class="group block p-8 rounded-2xl border border-white/10 bg-gradient-to-br hover:border-primary/50 transition-all duration-300"
-                        class:list={[area.gradient]}
+                        class:list={[
+                            "card group block p-8 rounded-xl",
+                            "bg-gradient-to-br backdrop-blur-sm",
+                            area.gradient
+                        ]}
+                        data-color={area.borderColor}
                     >
                         <div class="flex items-start gap-4">
                             <span class="text-4xl">{area.icon}</span>
                             <div>
-                                <h3 class="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                                <h3 class:list={["text-2xl font-bold mb-3 text-white/90 transition-colors duration-300", `group-hover:${area.hoverColor}`]}>
                                     {area.title}
                                 </h3>
                                 <p class="text-white/80 leading-relaxed">
@@ -92,7 +156,7 @@ const areas = [
             </p>
             <a
                 href="/kontakt"
-                class="inline-block mt-8 px-8 py-4 bg-primary hover:bg-primary-dark transition-colors rounded-lg font-medium"
+                class="inline-block mt-8 px-8 py-4 bg-primary hover:bg-primary-dark rounded-lg font-medium transition-colors duration-300"
             >
                 Schreib mir
             </a>
@@ -101,11 +165,11 @@ const areas = [
 
     <!-- Decorative Elements -->
     <div
-        class="absolute top-1/2 -translate-y-1/2 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
+        class="absolute top-1/2 -translate-y-1/2 left-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse"
     >
     </div>
     <div
-        class="absolute top-1/2 -translate-y-1/2 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl"
+        class="absolute top-1/2 -translate-y-1/2 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-pulse"
     >
     </div>
 </section>
