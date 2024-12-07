@@ -83,9 +83,11 @@ const articleMetadata = {
         {
             entry.data.heroImage && (
                 <div class="relative w-full aspect-[16/9] mb-8">
-                    <img
+                    <Image
                         src={entry.data.heroImage}
                         alt={entry.data.title}
+                        width={1200}
+                        height={675}
                         class="w-full h-full object-cover rounded-xl"
                         loading="eager"
                         transition:name={`hero-${entry.id}`}
@@ -145,7 +147,7 @@ const articleMetadata = {
             }
 
             <div class="flex items-center justify-center mt-6 gap-3">
-                <img
+                <Image
                     src={authorAvatar}
                     alt={authorName}
                     width={40}

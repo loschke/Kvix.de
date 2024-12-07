@@ -19,8 +19,8 @@ const blogSchema = z.object({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
 
-    // Media
-    heroImage: z.string().optional(),
+    // Media - using image() helper for optimization
+    heroImage: z.string(),
 
     // Taxonomy
     categories: z.array(z.string()).min(1).default(['Allgemein']),
@@ -33,7 +33,7 @@ const blogSchema = z.object({
     // Author information
     author: z.object({
         name: z.string(),
-        avatar: z.string().optional(),
+        avatar: z.string(),
         bio: z.string().optional(),
     }).default({
         name: 'Rico Loschke',

@@ -102,12 +102,13 @@ const formatDate = (date: Date): string => {
                         <article class="flex flex-col md:flex-row gap-6 bg-[#1b2432] rounded-xl overflow-hidden border border-white/10 group-hover:border-primary/50 transition-all duration-300 group-hover:bg-[#1f2838]">
                             <div class="md:w-[45%]">
                                 {post.data.heroImage ? (
-                                    <img
+                                    <Image
                                         src={post.data.heroImage}
                                         alt={post.data.title}
+                                        width={800}
+                                        height={450}
                                         class="w-full h-full object-cover aspect-[16/9]"
                                         loading="lazy"
-                                        decoding="async"
                                         transition:name={`hero-${post.id}`}
                                     />
                                 ) : (
