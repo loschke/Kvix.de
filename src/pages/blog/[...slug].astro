@@ -95,25 +95,37 @@ const headings = await post
                     <time
                         datetime={post.data.pubDate.toISOString()}
                         class="text-white/60"
+                        transition:name={`date-${post.id}`}
                     >
                         {formatDate(post.data.pubDate)}
                     </time>
                 )
             }
 
-            <h1 class="text-4xl md:text-5xl font-bold my-6">
+            <h1
+                class="text-4xl md:text-5xl font-bold my-6"
+                transition:name={`title-${post.id}`}
+            >
                 {post.data.title}
             </h1>
 
             {
                 post.data.description && (
-                    <p class="text-xl text-white/80">{post.data.description}</p>
+                    <p
+                        class="text-xl text-white/80"
+                        transition:name={`excerpt-${post.id}`}
+                    >
+                        {post.data.description}
+                    </p>
                 )
             }
 
             {
                 post.data.categories && post.data.categories.length > 0 && (
-                    <div class="flex flex-wrap justify-center gap-2 mt-6">
+                    <div
+                        class="flex flex-wrap justify-center gap-2 mt-6"
+                        transition:name={`categories-${post.id}`}
+                    >
                         {post.data.categories.map((category: string) => (
                             <a
                                 href={`/blog/category/${category.toLowerCase()}`}

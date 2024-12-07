@@ -2,6 +2,7 @@
 import "../style/global.css";
 import Navigation from "../components/navigation/Navigation.astro";
 import Footer from "../components/navigation/Footer.astro";
+import { ClientRouter } from "astro:transitions";
 
 interface ArticleMetadata {
 	publishedTime: string;
@@ -33,6 +34,13 @@ const isHomepage = Astro.url.pathname === "/";
 const finalCanonicalURL =
 	canonicalURL ||
 	new URL(Astro.url.pathname, Astro.site || "https://kvix.de").toString();
+
+// Navigation items in order (used to determine direction)
+const NAV_ITEMS = ["/about", "/projekte", "/blog", "/playground", "/guides"];
+const currentPath = Astro.url.pathname;
+const currentIndex = NAV_ITEMS.findIndex((path) =>
+	currentPath.startsWith(path),
+);
 ---
 
 <!doctype html>
@@ -51,6 +59,7 @@ const finalCanonicalURL =
 		/>
 		<link rel="stylesheet" href="/fonts/fonts.css" />
 		<link rel="canonical" href={finalCanonicalURL} />
+		<ClientRouter />
 
 		{/* Open Graph */}
 		<meta property="og:title" content={title} />
@@ -92,29 +101,112 @@ const finalCanonicalURL =
 
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+
+		<style is:global>
+			::view-transition-old(root),
+			::view-transition-new(root) {
+				animation: none;
+				mix-blend-mode: normal;
+			}
+
+			::view-transition-old(page) {
+				animation: var(--page-transition-out, fade-scale-out) 0.5s
+					cubic-bezier(0.76, 0, 0.24, 1);
+			}
+
+			::view-transition-new(page) {
+				animation: var(--page-transition-in, fade-scale-in) 0.5s
+					cubic-bezier(0.76, 0, 0.24, 1);
+			}
+
+			@keyframes fade-scale-out {
+				to {
+					opacity: 0;
+					transform: scale(0.95) translateY(10px);
+				}
+			}
+
+			@keyframes fade-scale-in {
+				from {
+					opacity: 0;
+					transform: scale(1.05) translateY(-10px);
+				}
+			}
+
+			@keyframes fade-scale-out-reverse {
+				to {
+					opacity: 0;
+					transform: scale(1.05) translateY(-10px);
+				}
+			}
+
+			@keyframes fade-scale-in-reverse {
+				from {
+					opacity: 0;
+					transform: scale(0.95) translateY(10px);
+				}
+			}
+		</style>
 	</head>
 	<body class="bg-base text-white/90 min-h-screen flex flex-col">
 		<Navigation />
-		<main class={`flex-grow ${isHomepage ? "" : "pt-32"}`}>
+		<main
+			class={`flex-grow ${isHomepage ? "" : "pt-32"}`}
+			style="view-transition-name: page;"
+			data-nav-index={currentIndex}
+		>
 			<slot />
 		</main>
 		<Footer />
 	</body>
 </html>
 
-<script is:inline>
-	const updateTheme = () => {
-		const isDark =
-			localStorage.theme === "dark" ||
-			(!("theme" in localStorage) &&
-				window.matchMedia("(prefers-color-scheme: dark)").matches);
-		document.documentElement.classList.toggle("dark", isDark);
-	};
-	updateTheme();
-	window.addEventListener("storage", updateTheme);
-	window
-		.matchMedia("(prefers-color-scheme: dark)")
-		.addEventListener("change", updateTheme);
+<script>
+	document.addEventListener("astro:before-preparation", (event) => {
+		const NAV_ITEMS = [
+			"/about",
+			"/projekte",
+			"/blog",
+			"/playground",
+			"/guides",
+		];
+		const fromPath = new URL(event.from).pathname;
+		const toPath = new URL(event.to).pathname;
+
+		const fromIndex = NAV_ITEMS.findIndex((path) =>
+			fromPath.startsWith(path),
+		);
+		const toIndex = NAV_ITEMS.findIndex((path) => toPath.startsWith(path));
+
+		if (fromIndex === -1 || toIndex === -1) return;
+
+		// Set animation direction based on navigation direction
+		if (toIndex > fromIndex) {
+			document.documentElement.style.setProperty(
+				"--page-transition-out",
+				"fade-scale-out",
+			);
+			document.documentElement.style.setProperty(
+				"--page-transition-in",
+				"fade-scale-in",
+			);
+		} else {
+			document.documentElement.style.setProperty(
+				"--page-transition-out",
+				"fade-scale-out-reverse",
+			);
+			document.documentElement.style.setProperty(
+				"--page-transition-in",
+				"fade-scale-in-reverse",
+			);
+		}
+	});
+
+	document.addEventListener("astro:after-swap", () => {
+		// Reset animation properties
+		document.documentElement.style.removeProperty("--page-transition-out");
+		document.documentElement.style.removeProperty("--page-transition-in");
+	});
 </script>
 
 <style>
@@ -122,5 +214,17 @@ const finalCanonicalURL =
 	main:not(:empty) {
 		position: relative;
 		z-index: 1;
+	}
+
+	/* Add perspective for 3D effect */
+	body {
+		perspective: 1000px;
+		transform-style: preserve-3d;
+		overflow-x: hidden;
+	}
+
+	main {
+		transform-origin: center;
+		backface-visibility: hidden;
 	}
 </style>

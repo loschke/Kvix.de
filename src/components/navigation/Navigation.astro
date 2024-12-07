@@ -11,6 +11,9 @@ const navItems = [
 
 // Check if we're on the homepage
 const isHomepage = Astro.url.pathname === "/";
+
+// Get current path for active state
+const currentPath = Astro.url.pathname;
 ---
 
 <header class="fixed top-0 inset-x-0 z-50" id="main-header">
@@ -42,14 +45,28 @@ const isHomepage = Astro.url.pathname === "/";
                 <!-- Navigation Menu -->
                 <nav class="flex gap-10 mr-16" aria-label="Main navigation">
                     {
-                        navItems.map(({ href, label }) => (
-                            <a
-                                href={href}
-                                class="nav-link relative text-white/80 hover:text-white transition-colors"
-                            >
-                                {label}
-                            </a>
-                        ))
+                        navItems.map(({ href, label }) => {
+                            const isActive =
+                                currentPath === href ||
+                                (href !== "/" && currentPath.startsWith(href));
+                            return (
+                                <a
+                                    href={href}
+                                    class:list={[
+                                        "nav-link relative text-white/80 hover:text-white transition-colors",
+                                        { active: isActive },
+                                    ]}
+                                >
+                                    {label}
+                                    {isActive && (
+                                        <div
+                                            class="absolute bottom-0 left-0 w-full h-0.5 bg-primary"
+                                            transition:name="active-nav"
+                                        />
+                                    )}
+                                </a>
+                            );
+                        })
                     }
                 </nav>
 
@@ -80,8 +97,12 @@ const isHomepage = Astro.url.pathname === "/";
         transition: transform 0.3s ease;
     }
 
-    .nav-link:hover::after {
+    .nav-link:not(.active):hover::after {
         transform: scaleX(1);
+    }
+
+    .nav-link.active {
+        color: theme(colors.white);
     }
 
     #nav-backdrop {
