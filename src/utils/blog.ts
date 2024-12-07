@@ -38,8 +38,8 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
     if (cache.posts) return cache.posts;
 
     const posts = await getCollection("blog", ({ data }: { data: BlogData }) => {
-        // Use process.env.NODE_ENV instead of import.meta.env
-        return process.env.NODE_ENV === 'production' ? !data.draft : true;
+        // Use import.meta.env.PROD for Astro environment
+        return import.meta.env.PROD ? !data.draft : true;
     });
 
     // Sort posts by date (newest first)
@@ -115,9 +115,12 @@ export function filterPostsByTag(posts: BlogPost[], tag: string): BlogPost[] {
 
 /**
  * Finds a post by its ID/slug
+ * Now handles .md extension in the slug
  */
 export function findPostById(posts: BlogPost[], id: string): BlogPost | undefined {
-    return posts.find(post => post.id === id);
+    // Remove .md extension if it exists
+    const normalizedId = id.replace(/\.md$/, '');
+    return posts.find(post => post.id === normalizedId);
 }
 
 /**

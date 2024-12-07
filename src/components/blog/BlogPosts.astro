@@ -34,35 +34,12 @@ const {
     posts: providedPosts,
 } = Astro.props;
 
-// Debug: Log the environment
-console.log(
-    "Environment:",
-    import.meta.env.PROD ? "production" : "development",
-);
-
-// Fetch posts using the updated blog utils
-const allPosts = await getCollection("blog", ({ data }: { data: BlogData }) => {
-    // In production, filter out drafts. In dev, show all posts
-    return import.meta.env.PROD ? !data.draft : true;
-});
-
-// Debug: Log all fetched posts
-console.log(
-    "All posts:",
-    allPosts.map((post: BlogPost) => ({
-        id: post.id,
-        title: post.data.title,
-        draft: post.data.draft,
-        date: post.data.pubDate,
-    })),
-);
-
-// Use provided posts or all posts
-const posts = providedPosts || allPosts;
-
-// Debug: Log provided vs fetched posts
-console.log("Using provided posts:", !!providedPosts);
-console.log("Number of posts before sorting:", posts.length);
+// Only fetch posts if none are provided
+const posts =
+    providedPosts ||
+    (await getCollection("blog", ({ data }: { data: BlogData }) => {
+        return import.meta.env.PROD ? !data.draft : true;
+    }));
 
 // Sort posts by date (newest first)
 const sortedPosts = [...posts].sort((a: BlogPost, b: BlogPost) => {
@@ -73,13 +50,6 @@ const sortedPosts = [...posts].sort((a: BlogPost, b: BlogPost) => {
 
 // Apply limit if specified
 const finalPosts = limit ? sortedPosts.slice(0, limit) : sortedPosts;
-
-// Debug: Log final posts
-console.log("Final posts count:", finalPosts.length);
-console.log(
-    "Final posts:",
-    finalPosts.map((post) => post.data.title),
-);
 
 // Extract unique categories with proper typing
 const allCategories = posts.flatMap(
@@ -108,10 +78,9 @@ const formatDate = (date: Date): string => {
             (title || description) && (
                 <div class="text-center mb-16">
                     {title && (
-                        <h2
-                            class="text-4xl md:text-5xl font-bold mb-6"
-                            set:html={title}
-                        />
+                        <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                            {title}
+                        </h2>
                     )}
                     {description && (
                         <p class="text-xl text-white/80 max-w-2xl mx-auto">

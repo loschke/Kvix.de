@@ -1,0 +1,21 @@
+---
+interface Props {
+    error?: Error;
+    message?: string;
+}
+
+const { error, message = "Ein unerwarteter Fehler ist aufgetreten." } =
+    Astro.props;
+---
+
+<div class="bg-red-500/10 border border-red-500/20 rounded-lg p-6 my-4">
+    <h2 class="text-xl font-bold text-red-500 mb-2">Fehler</h2>
+    <p class="text-white/80 mb-4">{message}</p>
+    {
+        error && import.meta.env.DEV && (
+            <pre class="bg-black/20 p-4 rounded overflow-x-auto text-sm">
+                {error.stack}
+            </pre>
+        )
+    }
+</div>

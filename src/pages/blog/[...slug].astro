@@ -2,7 +2,9 @@
 import { type MarkdownHeading } from "astro";
 import { Picture } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
+import ErrorLayout from "../../layouts/ErrorLayout.astro";
 import BackToLink from "../../components/ui/BackToLink.astro";
+import ErrorBoundary from "../../components/ui/ErrorBoundary.astro";
 import {
     getBlogPosts,
     validateAndGetPost,
@@ -15,45 +17,82 @@ interface Props {
 
 export async function getStaticPaths() {
     const posts = await getBlogPosts();
+    const paths = [];
 
-    return Promise.all(
-        posts.map(async (entry) => {
-            // Use the new validateAndGetPost function for better validation
-            const post = await validateAndGetPost(entry.id);
+    for (const post of posts) {
+        // Strip .md from the ID if it exists
+        const baseId = post.id.replace(/\.md$/, '');
+        
+        // Add path without .md extension
+        paths.push({
+            params: { slug: baseId },
+            props: { entry: post },
+        });
 
-            if (!post) {
-                // Return a 404 response for invalid posts
-                return {
-                    params: { slug: entry.id },
-                    props: { entry: null },
-                };
-            }
+        // Add path with .md extension
+        paths.push({
+            params: { slug: `${baseId}.md` },
+            props: { entry: post },
+        });
+    }
 
-            return {
-                params: { slug: entry.id },
-                props: { entry: post },
-            };
-        }),
-    );
+    // Debug log
+    console.log('Generated paths:', paths.map(p => p.params.slug));
+
+    return paths;
 }
 
-// Get the entry from props
 const { entry } = Astro.props;
+const currentPath = Astro.url.pathname;
 
-// Redirect to 404 if post not found
-if (!entry) {
-    return Astro.redirect("/404", 404);
+// Redirect .md URLs to clean URLs
+if (currentPath.endsWith('.md')) {
+    return Astro.redirect(currentPath.replace(/\.md$/, ''), 301);
 }
 
-// Render the content with error handling
-let Content, headings;
+// Handle 404 case
+if (!entry) {
+    return new Response(null, {
+        status: 404,
+        headers: {
+            Location: "/404",
+        },
+    });
+}
+
+// Render content with error handling
+let Content, headings, renderError;
 try {
     const rendered = await entry.render();
     Content = rendered.Content;
     headings = rendered.headings;
 } catch (error) {
     console.error(`Error rendering post ${entry.id}:`, error);
-    return Astro.redirect("/404", 404);
+    renderError = error;
+}
+
+// Prepare metadata only if no error
+let seoTitle,
+    seoDescription,
+    ogImage,
+    authorName,
+    authorAvatar,
+    articleMetadata;
+
+if (!renderError) {
+    seoTitle =
+        entry.data.seo?.metaTitle || `${entry.data.title} - Rico Loschke`;
+    seoDescription = entry.data.seo?.metaDescription || entry.data.description;
+    ogImage = entry.data.seo?.ogImage || entry.data.heroImage;
+    authorName = entry.data.author?.name || "Rico Loschke";
+    authorAvatar =
+        entry.data.author?.avatar || "/images/rico-loschke_avatar.jpg";
+    articleMetadata = {
+        publishedTime: entry.data.pubDate.toISOString(),
+        modifiedTime: entry.data.updatedDate?.toISOString(),
+        authors: [authorName],
+        tags: entry.data.tags || [],
+    };
 }
 
 const formatDate = (date: Date): string => {
@@ -66,201 +105,192 @@ const formatDate = (date: Date): string => {
         return "";
     }
 };
-
-// Prepare SEO metadata
-const seoTitle =
-    entry.data.seo?.metaTitle || `${entry.data.title} - Rico Loschke`;
-const seoDescription =
-    entry.data.seo?.metaDescription || entry.data.description;
-const ogImage = entry.data.seo?.ogImage || entry.data.heroImage;
-
-// Prepare author data with fallbacks
-const authorName = entry.data.author?.name || "Rico Loschke";
-const authorAvatar =
-    entry.data.author?.avatar || "/images/rico-loschke_avatar.jpg";
-
-// Prepare article metadata for SEO
-const articleMetadata = {
-    publishedTime: entry.data.pubDate.toISOString(),
-    modifiedTime: entry.data.updatedDate?.toISOString(),
-    authors: [authorName],
-    tags: entry.data.tags || [],
-};
 ---
 
-<Layout
-    title={seoTitle}
-    description={seoDescription}
-    ogImage={ogImage}
-    article={articleMetadata}
-    canonicalURL={entry.data.seo?.canonicalURL}
->
-    <!-- Hero Section -->
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 pb-12">
-        {
-            entry.data.heroImage && (
-                <div class="relative w-full aspect-[16/9] mb-8">
-                    <Picture
-                        src={entry.data.heroImage}
-                        alt={entry.data.title}
-                        formats={["avif", "webp"]}
-                        fallbackFormat="png"
-                        width={1200}
-                        height={675}
-                        loading="eager"
-                        class="w-full h-full object-cover rounded-xl"
-                        transition:name={`hero-${entry.id}`}
-                    />
-                </div>
-            )
-        }
-
-        <div class="text-center">
-            {
-                entry.data.pubDate && (
-                    <time
-                        datetime={entry.data.pubDate.toISOString()}
-                        class="text-white/60"
-                        transition:name={`date-${entry.id}`}
-                    >
-                        {formatDate(entry.data.pubDate)}
-                    </time>
-                )
-            }
-
-            <h1
-                class="text-4xl md:text-5xl font-bold my-6"
-                transition:name={`title-${entry.id}`}
-            >
-                {entry.data.title}
-            </h1>
-
-            {
-                entry.data.description && (
-                    <p
-                        class="text-xl text-white/80"
-                        transition:name={`excerpt-${entry.id}`}
-                    >
-                        {entry.data.description}
-                    </p>
-                )
-            }
-
-            {
-                entry.data.categories && entry.data.categories.length > 0 && (
-                    <div
-                        class="flex flex-wrap justify-center gap-2 mt-6"
-                        transition:name={`categories-${entry.id}`}
-                    >
-                        {entry.data.categories.map((category: string) => (
-                            <a
-                                href={`/blog/category/${category.toLowerCase()}`}
-                                class="px-3 py-1 bg-white/5 rounded-full text-sm hover:bg-white/10 transition-colors"
-                                aria-label={`Artikel in der Kategorie ${category}`}
-                            >
-                                {category}
-                            </a>
-                        ))}
-                    </div>
-                )
-            }
-
-            <div class="flex items-center justify-center mt-6 gap-3">
-                <Picture
-                    src={authorAvatar}
-                    alt={authorName}
-                    formats={["avif", "webp"]}
-                    fallbackFormat="jpg"
-                    width={40}
-                    height={40}
-                    class="rounded-full"
+{
+    renderError ? (
+        <ErrorLayout
+            title="Fehler beim Laden des Artikels"
+            description="Der Artikel konnte nicht geladen werden."
+        >
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+                <ErrorBoundary
+                    message="Der Artikel konnte nicht geladen werden."
+                    error={
+                        renderError instanceof Error
+                            ? renderError
+                            : new Error("Unknown error")
+                    }
                 />
-                <span class="text-white/80">{authorName}</span>
+                <BackToLink href="/blog" />
             </div>
-        </div>
-    </div>
+        </ErrorLayout>
+    ) : (
+        <Layout
+            title={seoTitle}
+            description={seoDescription}
+            ogImage={ogImage}
+            article={articleMetadata}
+            canonicalURL={entry.data.seo?.canonicalURL}
+        >
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 pb-12">
+                {entry.data.heroImage && (
+                    <div class="relative w-full aspect-[16/9] mb-8">
+                        <Picture
+                            src={entry.data.heroImage}
+                            alt={entry.data.title}
+                            formats={["avif", "webp"]}
+                            fallbackFormat="png"
+                            width={1200}
+                            height={675}
+                            loading="eager"
+                            class="w-full h-full object-cover rounded-xl"
+                            transition:name={`hero-${entry.id}`}
+                        />
+                    </div>
+                )}
 
-    <div class="border-t border-white/5 my-8" role="separator"></div>
+                <div class="text-center">
+                    {entry.data.pubDate && (
+                        <time
+                            datetime={entry.data.pubDate.toISOString()}
+                            class="text-white/60"
+                            transition:name={`date-${entry.id}`}
+                        >
+                            {formatDate(entry.data.pubDate)}
+                        </time>
+                    )}
 
-    <!-- Content Container -->
-    <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
-        <div class="relative flex flex-col xl:flex-row xl:gap-24">
-            <!-- Main Content -->
-            <main class="flex-1">
-                <div class="max-w-[65ch] mx-auto">
-                    <article class="prose prose-invert max-w-none">
-                        <Content />
-
-                        {
-                            entry.data.tags && entry.data.tags.length > 0 && (
-                                <div class="mt-12 pt-8 border-t border-white/5">
-                                    <div
-                                        class="flex flex-wrap gap-2"
-                                        role="list"
-                                        aria-label="Artikel-Tags"
-                                    >
-                                        {entry.data.tags.map((tag: string) => (
-                                            <a
-                                                href={`/blog/tag/${tag.toLowerCase()}`}
-                                                class="px-3 py-1 bg-white/5 rounded-full text-sm hover:bg-white/10 transition-colors text-white/80 hover:text-white"
-                                                aria-label={`Artikel mit Tag ${tag}`}
-                                            >
-                                                #{tag}
-                                            </a>
-                                        ))}
-                                    </div>
-                                </div>
-                            )
-                        }
-
-                        <footer class="mt-12 pt-8 border-t border-white/5">
-                            <BackToLink href="/blog" />
-                        </footer>
-                    </article>
-                </div>
-            </main>
-
-            <!-- Table of Contents -->
-            {
-                headings && headings.length > 0 && (
-                    <aside
-                        class="hidden xl:block w-80 shrink-0"
-                        aria-label="Inhaltsverzeichnis"
+                    <h1
+                        class="text-4xl md:text-5xl font-bold my-6"
+                        transition:name={`title-${entry.id}`}
                     >
-                        <div class="sticky top-24">
-                            <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl">
-                                <h2 class="text-xl font-bold mb-4">
-                                    Inhaltsverzeichnis
-                                </h2>
-                                <nav
-                                    class="space-y-2"
-                                    id="toc-nav"
-                                    aria-label="Artikel-Navigation"
-                                >
-                                    {headings.map(
-                                        (heading: MarkdownHeading) => (
-                                            <a
-                                                href={`#${heading.slug}`}
-                                                class={`block transition-colors toc-item
+                        {entry.data.title}
+                    </h1>
+
+                    {entry.data.description && (
+                        <p
+                            class="text-xl text-white/80"
+                            transition:name={`excerpt-${entry.id}`}
+                        >
+                            {entry.data.description}
+                        </p>
+                    )}
+
+                    {entry.data.categories &&
+                        entry.data.categories.length > 0 && (
+                            <div
+                                class="flex flex-wrap justify-center gap-2 mt-6"
+                                transition:name={`categories-${entry.id}`}
+                            >
+                                {entry.data.categories.map(
+                                    (category: string) => (
+                                        <a
+                                            href={`/blog/category/${category.toLowerCase()}`}
+                                            class="px-3 py-1 bg-white/5 rounded-full text-sm hover:bg-white/10 transition-colors"
+                                            aria-label={`Artikel in der Kategorie ${category}`}
+                                        >
+                                            {category}
+                                        </a>
+                                    ),
+                                )}
+                            </div>
+                        )}
+
+                    <div class="flex items-center justify-center mt-6 gap-3">
+                        <Picture
+                            src={authorAvatar}
+                            alt={authorName}
+                            formats={["avif", "webp"]}
+                            fallbackFormat="jpg"
+                            width={40}
+                            height={40}
+                            class="rounded-full"
+                        />
+                        <span class="text-white/80">{authorName}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/5 my-8" role="separator" />
+
+            <div class="max-w-[1200px] mx-auto px-4 sm:px-6">
+                <div class="relative flex flex-col xl:flex-row xl:gap-24">
+                    <main class="flex-1">
+                        <div class="max-w-[65ch] mx-auto">
+                            <article class="prose prose-invert max-w-none">
+                                <Content />
+
+                                {entry.data.tags &&
+                                    entry.data.tags.length > 0 && (
+                                        <div class="mt-12 pt-8 border-t border-white/5">
+                                            <div
+                                                class="flex flex-wrap gap-2"
+                                                role="list"
+                                                aria-label="Artikel-Tags"
+                                            >
+                                                {entry.data.tags.map(
+                                                    (tag: string) => (
+                                                        <a
+                                                            href={`/blog/tag/${tag.toLowerCase()}`}
+                                                            class="px-3 py-1 bg-white/5 rounded-full text-sm hover:bg-white/10 transition-colors text-white/80 hover:text-white"
+                                                            aria-label={`Artikel mit Tag ${tag}`}
+                                                        >
+                                                            #{tag}
+                                                        </a>
+                                                    ),
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                <footer class="mt-12 pt-8 border-t border-white/5">
+                                    <BackToLink href="/blog" />
+                                </footer>
+                            </article>
+                        </div>
+                    </main>
+
+                    {headings && headings.length > 0 && (
+                        <aside
+                            class="hidden xl:block w-80 shrink-0"
+                            aria-label="Inhaltsverzeichnis"
+                        >
+                            <div class="sticky top-24">
+                                <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl">
+                                    <h2 class="text-xl font-bold mb-4">
+                                        Inhaltsverzeichnis
+                                    </h2>
+                                    <nav
+                                        class="space-y-2"
+                                        id="toc-nav"
+                                        aria-label="Artikel-Navigation"
+                                    >
+                                        {headings.map(
+                                            (heading: MarkdownHeading) => (
+                                                <a
+                                                    href={`#${heading.slug}`}
+                                                    class={`block transition-colors toc-item
                                             ${heading.depth === 2 ? "ml-0" : ""}
                                             ${heading.depth === 3 ? "ml-4 text-sm" : ""}
                                             ${heading.depth === 4 ? "ml-8 text-sm" : ""}`}
-                                                data-heading={heading.slug}
-                                                aria-level={heading.depth}
-                                            >
-                                                {heading.text}
-                                            </a>
-                                        ),
-                                    )}
-                                </nav>
+                                                    data-heading={heading.slug}
+                                                    aria-level={heading.depth}
+                                                >
+                                                    {heading.text}
+                                                </a>
+                                            ),
+                                        )}
+                                    </nav>
+                                </div>
                             </div>
-                        </div>
-                    </aside>
-                )
-            }
-        </div>
-    </div>
-</Layout>
+                        </aside>
+                    )}
+                </div>
+            </div>
+        </Layout>
+    )
+}
 
 <style>
     .prose {
@@ -275,7 +305,6 @@ const articleMetadata = {
         @apply text-white font-bold;
     }
 
-    /* Improve ToC readability */
     nav {
         max-height: calc(100vh - 200px);
         overflow-y: auto;

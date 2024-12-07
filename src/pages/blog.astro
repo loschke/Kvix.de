@@ -1,20 +1,49 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import ErrorLayout from "../layouts/ErrorLayout.astro";
 import BlogPosts from "../components/blog/BlogPosts.astro";
+import ErrorBoundary from "../components/ui/ErrorBoundary.astro";
 import { getBlogPosts } from "../utils/blog";
 
-// Get all blog posts
-const posts = await getBlogPosts();
+let posts;
+let error;
+
+try {
+    posts = await getBlogPosts();
+} catch (e) {
+    console.error("Error fetching blog posts:", e);
+    error = e;
+}
 ---
 
-<Layout
-    title="Blog - Rico Loschke"
-    description="Aktuelle Einblicke und Gedanken zu KI, Technologie und digitaler Transformation"
->
-    <BlogPosts
-        posts={posts}
-        showCategories={true}
-        title="Blog"
-        className="container-padding"
-    />
-</Layout>
+{
+    error ? (
+        <ErrorLayout
+            title="Fehler beim Laden der Blog-Artikel"
+            description="Die Blog-Artikel konnten nicht geladen werden."
+        >
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+                <ErrorBoundary
+                    message="Die Blog-Artikel konnten nicht geladen werden."
+                    error={
+                        error instanceof Error
+                            ? error
+                            : new Error("Unknown error")
+                    }
+                />
+            </div>
+        </ErrorLayout>
+    ) : (
+        <Layout
+            title="Blog - Rico Loschke"
+            description="Aktuelle Einblicke und Gedanken zu KI, Technologie und digitaler Transformation"
+        >
+            <BlogPosts
+                posts={posts}
+                showCategories={true}
+                title="Blog"
+                className="container-padding"
+            />
+        </Layout>
+    )
+}
