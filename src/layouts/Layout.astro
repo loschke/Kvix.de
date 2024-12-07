@@ -151,80 +151,23 @@ const currentIndex = NAV_ITEMS.findIndex((path) =>
 	<body class="bg-base text-white/90 min-h-screen flex flex-col">
 		<Navigation />
 		<main
-			class={`flex-grow ${isHomepage ? "" : "pt-32"}`}
+			class={`flex-grow ${isHomepage ? "" : "pt-28"}`}
 			style="view-transition-name: page;"
 			data-nav-index={currentIndex}
 		>
 			<slot />
 		</main>
 		<Footer />
+
+		<style>
+			body {
+				overflow-x: hidden;
+			}
+
+			main {
+				position: relative;
+				z-index: 1;
+			}
+		</style>
 	</body>
 </html>
-
-<script>
-	document.addEventListener("astro:before-preparation", (event) => {
-		const NAV_ITEMS = [
-			"/about",
-			"/projekte",
-			"/blog",
-			"/playground",
-			"/guides",
-		];
-		const fromPath = new URL(event.from).pathname;
-		const toPath = new URL(event.to).pathname;
-
-		const fromIndex = NAV_ITEMS.findIndex((path) =>
-			fromPath.startsWith(path),
-		);
-		const toIndex = NAV_ITEMS.findIndex((path) => toPath.startsWith(path));
-
-		if (fromIndex === -1 || toIndex === -1) return;
-
-		// Set animation direction based on navigation direction
-		if (toIndex > fromIndex) {
-			document.documentElement.style.setProperty(
-				"--page-transition-out",
-				"fade-scale-out",
-			);
-			document.documentElement.style.setProperty(
-				"--page-transition-in",
-				"fade-scale-in",
-			);
-		} else {
-			document.documentElement.style.setProperty(
-				"--page-transition-out",
-				"fade-scale-out-reverse",
-			);
-			document.documentElement.style.setProperty(
-				"--page-transition-in",
-				"fade-scale-in-reverse",
-			);
-		}
-	});
-
-	document.addEventListener("astro:after-swap", () => {
-		// Reset animation properties
-		document.documentElement.style.removeProperty("--page-transition-out");
-		document.documentElement.style.removeProperty("--page-transition-in");
-	});
-</script>
-
-<style>
-	/* Ensure subpage content starts below navigation */
-	main:not(:empty) {
-		position: relative;
-		z-index: 1;
-	}
-
-	/* Add perspective for 3D effect */
-	body {
-		perspective: 1000px;
-		transform-style: preserve-3d;
-		overflow-x: hidden;
-	}
-
-	main {
-		transform-origin: center;
-		backface-visibility: hidden;
-	}
-</style>

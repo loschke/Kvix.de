@@ -16,11 +16,11 @@ const isHomepage = Astro.url.pathname === "/";
 const currentPath = Astro.url.pathname;
 ---
 
-<header class="fixed top-0 inset-x-0 z-50" id="main-header">
+<header class="fixed top-0 left-0 right-0 w-full z-50" id="main-header">
     <div
         class="absolute inset-0 transition-all duration-300 border-b border-transparent"
         id="nav-backdrop"
-        style="background-color: rgba(var(--background-rgb), var(--bg-opacity, 0)); backdrop-filter: blur(var(--blur-px, 0));"
+        style="background-color: rgba(17, 24, 39, var(--bg-opacity, 0)); backdrop-filter: blur(var(--blur-px, 0));"
     >
     </div>
     <div class="container-padding py-6 relative">
@@ -105,22 +105,17 @@ const currentPath = Astro.url.pathname;
         color: theme(colors.white);
     }
 
-    #nav-backdrop {
-        --background-rgb: 17, 24, 39;
-    }
-
     #nav-backdrop.scrolled {
         border-color: rgba(255, 255, 255, 0.1);
     }
 </style>
 
 <script>
-    const backdrop = document.getElementById("nav-backdrop");
-
     const updateNavigation = () => {
-        if (window.scrollY > 50) {
-            backdrop?.style.setProperty("--bg-opacity", "0.5");
-            backdrop?.style.setProperty("--blur-px", "8px");
+        const backdrop = document.getElementById("nav-backdrop");
+        if (window.scrollY > 0) {
+            backdrop?.style.setProperty("--bg-opacity", "0.95");
+            backdrop?.style.setProperty("--blur-px", "16px");
             backdrop?.classList.add("scrolled");
         } else {
             backdrop?.style.setProperty("--bg-opacity", "0");
@@ -129,6 +124,6 @@ const currentPath = Astro.url.pathname;
         }
     };
 
-    window.addEventListener("scroll", updateNavigation);
-    updateNavigation(); // Initial check
+    window.addEventListener("scroll", updateNavigation, { passive: true });
+    updateNavigation();
 </script>
