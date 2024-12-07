@@ -1,6 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import BlogPosts from "../components/blog/BlogPosts.astro";
+import { getBlogPosts } from "../utils/blog";
+
+// Get all blog posts
+const posts = await getBlogPosts();
 ---
 
 <Layout
@@ -8,7 +12,7 @@ import BlogPosts from "../components/blog/BlogPosts.astro";
     description="Aktuelle Einblicke und Gedanken zu KI, Technologie und digitaler Transformation"
 >
     <BlogPosts
-        limit={10}
+        posts={posts}
         showCategories={true}
         title="Blog"
         className="container-padding"

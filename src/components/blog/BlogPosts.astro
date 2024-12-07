@@ -14,6 +14,16 @@ interface Props {
     posts?: BlogPost[];
 }
 
+interface BlogData {
+    draft: boolean;
+    title: string;
+    description: string;
+    pubDate: Date;
+    categories?: string[];
+    tags?: string[];
+    heroImage?: string;
+}
+
 const {
     limit,
     showLoadMore = false,
@@ -24,31 +34,71 @@ const {
     posts: providedPosts,
 } = Astro.props;
 
-// Fetch and sort posts with proper typing
-const allPosts = await getCollection("blog", ({ data }: BlogPost) => {
+// Debug: Log the environment
+console.log(
+    "Environment:",
+    import.meta.env.PROD ? "production" : "development",
+);
+
+// Fetch posts using the updated blog utils
+const allPosts = await getCollection("blog", ({ data }: { data: BlogData }) => {
+    // In production, filter out drafts. In dev, show all posts
     return import.meta.env.PROD ? !data.draft : true;
 });
 
-const posts = providedPosts || allPosts;
-const sortedPosts = posts.sort(
-    (a: BlogPost, b: BlogPost) =>
-        b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+// Debug: Log all fetched posts
+console.log(
+    "All posts:",
+    allPosts.map((post: BlogPost) => ({
+        id: post.id,
+        title: post.data.title,
+        draft: post.data.draft,
+        date: post.data.pubDate,
+    })),
 );
+
+// Use provided posts or all posts
+const posts = providedPosts || allPosts;
+
+// Debug: Log provided vs fetched posts
+console.log("Using provided posts:", !!providedPosts);
+console.log("Number of posts before sorting:", posts.length);
+
+// Sort posts by date (newest first)
+const sortedPosts = [...posts].sort((a: BlogPost, b: BlogPost) => {
+    return (
+        new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+    );
+});
+
+// Apply limit if specified
 const finalPosts = limit ? sortedPosts.slice(0, limit) : sortedPosts;
 
-// Extract categories with proper typing
+// Debug: Log final posts
+console.log("Final posts count:", finalPosts.length);
+console.log(
+    "Final posts:",
+    finalPosts.map((post) => post.data.title),
+);
+
+// Extract unique categories with proper typing
 const allCategories = posts.flatMap(
     (post: BlogPost) => post.data.categories || [],
 );
-const uniqueCategories = [...new Set(allCategories)] as string[];
-const categories = showCategories ? uniqueCategories : [];
+const categories = showCategories
+    ? ([...new Set(allCategories)] as string[])
+    : [];
 
-// Utility function with proper typing
+// Format date helper
 const formatDate = (date: Date): string => {
-    return new Date(date).toLocaleDateString("de-DE", {
-        year: "numeric",
-        month: "long",
-    });
+    try {
+        return new Date(date).toLocaleDateString("de-DE", {
+            year: "numeric",
+            month: "long",
+        });
+    } catch {
+        return "";
+    }
 };
 ---
 
@@ -191,3 +241,9 @@ const formatDate = (date: Date): string => {
         }
     </div>
 </section>
+
+<style>
+    .blog-posts {
+        margin-bottom: 4rem;
+    }
+</style>
