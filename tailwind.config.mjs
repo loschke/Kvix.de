@@ -10,8 +10,9 @@ export default {
 			colors: {
 				base: {
 					DEFAULT: '#1B252F',
-					darker: '#161F28',
-					darkest: '#020B16'
+					lighter: '#242F3B', // Blog post backgrounds
+					darker: '#151D25',  // Navbar
+					darkest: '#0F1519'  // Footer
 				},
 				primary: {
 					DEFAULT: '#E91E63',

@@ -7,7 +7,7 @@
         --font-family-base: "FF Clan Pro", system-ui, -apple-system, sans-serif;
 
         /* Colors */
-        --color-base: #000000;
+        --color-base: #1B252F;
         --color-primary: #3b82f6;
         --color-primary-dark: #2563eb;
         --color-text: #ffffff;
@@ -100,9 +100,9 @@
 
     .animated-gradient-bg {
         background: linear-gradient(45deg,
-                rgba(17, 24, 39, 1) 0%,
-                rgba(31, 41, 55, 1) 50%,
-                rgba(17, 24, 39, 1) 100%);
+                #151D25 0%,
+                #1B252F 50%,
+                #151D25 100%);
         background-size: 400% 400%;
         animation: gradientBG 15s ease infinite;
     }

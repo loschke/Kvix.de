@@ -38,12 +38,19 @@ try {
             title="Blog - Rico Loschke"
             description="Aktuelle Einblicke und Gedanken zu KI, Technologie und digitaler Transformation"
         >
-            <BlogPosts
-                posts={posts}
-                showCategories={true}
-                title="Blog"
-                className="container-padding"
-            />
+            <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-12">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6" transition:name="page-title">Blog</h1>
+                    <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                        Aktuelle Einblicke und Gedanken zu KI, Technologie und digitaler Transformation.
+                    </p>
+                </div>
+                <BlogPosts
+                    posts={posts}
+                    showCategories={true}
+                    className="container-padding"
+                />
+            </div>
         </Layout>
     )
 }
