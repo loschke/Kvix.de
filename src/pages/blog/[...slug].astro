@@ -1,0 +1,239 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog', ({ data }) => {
+        return import.meta.env.PROD ? !data.draft : true;
+    });
+    
+    return posts.map((post) => ({
+        params: { slug: post.slug },
+        props: { post },
+    }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await post.render();
+
+const formatDate = (date: Date) => {
+    try {
+        return new Date(date).toLocaleDateString('de-DE', {
+            year: 'numeric',
+            month: 'long'
+        });
+    } catch {
+        return '';
+    }
+};
+---
+
+<Layout 
+    title={`${post.data.title} - Rico Loschke`}
+    description={post.data.description}
+>
+    <!-- Centered Hero Section -->
+    <header class="max-w-3xl mx-auto px-6 pb-12">
+        {post.data.heroImage && (
+            <img
+                src={post.data.heroImage}
+                alt={post.data.title}
+                class="w-full rounded-xl mb-8"
+                loading="lazy"
+            />
+        )}
+
+        <div class="text-center">
+            {post.data.pubDate && (
+                <time datetime={post.data.pubDate.toISOString()} class="text-white/60">
+                    {formatDate(post.data.pubDate)}
+                </time>
+            )}
+
+            <h1 class="text-4xl md:text-5xl font-bold my-6">{post.data.title}</h1>
+
+            {post.data.description && (
+                <p class="text-xl text-white/80">{post.data.description}</p>
+            )}
+
+            {post.data.categories && post.data.categories.length > 0 && (
+                <div class="flex flex-wrap justify-center gap-2 mt-6">
+                    {post.data.categories.map((category) => (
+                        <a
+                            href={`/blog/category/${category.toLowerCase()}`}
+                            class="px-3 py-1 bg-primary/5 rounded-full text-sm hover:bg-primary/10 transition-colors"
+                        >
+                            {category}
+                        </a>
+                    ))}
+                </div>
+            )}
+        </div>
+    </header>
+
+    <div class="border-t border-white/5 my-8"></div>
+
+    <!-- Content Section with TOC -->
+    <div class="max-w-screen-lg mx-auto px-6">
+        <div class="flex flex-col lg:flex-row gap-12">
+            <!-- Main Content -->
+            <article class="lg:flex-1">
+                <div class="prose prose-invert max-w-none">
+                    <Content />
+                </div>
+
+                <!-- Tags Section -->
+                {post.data.tags && post.data.tags.length > 0 && (
+                    <div class="mt-12 pt-8 border-t border-white/5">
+                        <div class="flex flex-wrap gap-2">
+                            {post.data.tags.map((tag) => (
+                                <a
+                                    href={`/blog/tag/${tag.toLowerCase()}`}
+                                    class="px-3 py-1 bg-primary/5 rounded-full text-sm hover:bg-primary/10 transition-colors text-white/80 hover:text-white"
+                                >
+                                    #{tag}
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                <footer class="mt-12 pt-8 border-t border-white/5">
+                    <a href="/blog" class="text-primary hover:text-primary-light transition-colors">
+                        ← Zurück zum Blog
+                    </a>
+                </footer>
+            </article>
+
+            <!-- Table of Contents -->
+            {headings.length > 0 && (
+                <aside class="lg:w-72 order-first lg:order-last">
+                    <div class="sticky top-24">
+                        <div class="p-6 bg-white/5 rounded-xl">
+                            <h2 class="text-xl font-bold mb-4">Inhaltsverzeichnis</h2>
+                            <nav class="space-y-2">
+                                {headings.map((heading) => (
+                                    <a
+                                        href={`#${heading.slug}`}
+                                        class={`block text-white/60 hover:text-white transition-colors toc-item
+                                            ${heading.depth === 2 ? 'ml-0' : ''}
+                                            ${heading.depth === 3 ? 'ml-4 text-sm' : ''}
+                                            ${heading.depth === 4 ? 'ml-8 text-sm' : ''}`}
+                                        data-heading={heading.slug}
+                                    >
+                                        {heading.text}
+                                    </a>
+                                ))}
+                            </nav>
+                        </div>
+                    </div>
+                </aside>
+            )}
+        </div>
+    </div>
+</Layout>
+
+<style>
+    .prose {
+        @apply prose-headings:scroll-mt-32;
+    }
+
+    /* TOC Item Styles */
+    .toc-item {
+        position: relative;
+        padding-left: 1rem;
+    }
+
+    .toc-item.active {
+        @apply text-white font-medium;
+    }
+
+    .toc-item.active::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 0.25rem;
+        height: 0.25rem;
+        @apply bg-white;
+        border-radius: 50%;
+    }
+</style>
+
+<script>
+    const setupTOC = () => {
+        try {
+            const headings = document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+            const tocItems = document.querySelectorAll('.toc-item');
+
+            if (headings.length === 0 || tocItems.length === 0) return;
+
+            // Use a more performant observer configuration
+            const observer = new IntersectionObserver(entries => {
+                // Group multiple entries to reduce DOM updates
+                const intersectingHeadings = entries
+                    .filter(entry => entry.isIntersecting)
+                    .map(entry => entry.target.id);
+
+                if (intersectingHeadings.length > 0) {
+                    // Get the last intersecting heading (most relevant)
+                    const activeId = intersectingHeadings[intersectingHeadings.length - 1];
+                    
+                    // Update TOC items efficiently
+                    tocItems.forEach(item => {
+                        const headingId = item.getAttribute('data-heading');
+                        item.classList.toggle('active', headingId === activeId);
+                    });
+                }
+            }, {
+                rootMargin: '-100px 0px -66%',
+                threshold: [0, 1.0] // Observe both entering and fully visible
+            });
+
+            // Observe all headings
+            headings.forEach(heading => observer.observe(heading));
+
+            // Efficient scroll handling
+            tocItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const id = item.getAttribute('data-heading');
+                    const heading = document.getElementById(id);
+                    if (heading) {
+                        // Update URL silently
+                        history.pushState(null, '', `#${id}`);
+                        // Smooth scroll
+                        heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // Cleanup function
+            return () => {
+                headings.forEach(heading => observer.unobserve(heading));
+                observer.disconnect();
+            };
+        } catch (error) {
+            console.error('Error setting up TOC:', error);
+        }
+    };
+
+    // Setup on initial load
+    document.addEventListener('DOMContentLoaded', setupTOC);
+
+    // Setup on view transitions
+    document.addEventListener('astro:page-load', setupTOC);
+
+    // Cleanup on view transitions
+    document.addEventListener('astro:before-preparation', () => {
+        try {
+            const cleanup = setupTOC();
+            if (cleanup && typeof cleanup === 'function') {
+                cleanup();
+            }
+        } catch (error) {
+            console.error('Error cleaning up TOC:', error);
+        }
+    });
+</script>

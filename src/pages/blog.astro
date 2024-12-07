@@ -1,99 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import BlogPosts from "../components/blog/BlogPosts.astro";
 ---
 
 <Layout
     title="Blog - Rico Loschke"
     description="Aktuelle Einblicke und Gedanken zu KI, Technologie und digitaler Transformation"
 >
-    <section class="container-padding">
-        <div class="max-container">
-            <h1 class="text-4xl md:text-5xl font-bold mb-8">Blog</h1>
-            <div class="grid gap-8 md:grid-cols-2">
-                <!-- Blog Post Template -->
-                <article
-                    class="bg-background-light/5 rounded-xl overflow-hidden border border-white/10 hover:border-primary/50 transition-colors"
-                >
-                    <div class="aspect-video bg-background-light/10"></div>
-                    <div class="p-6">
-                        <div
-                            class="flex items-center gap-4 text-sm text-white/60 mb-4"
-                        >
-                            <time datetime="2024-01-15">15. Januar 2024</time>
-                            <span class="px-3 py-1 bg-primary/10 rounded-full"
-                                >KI & ML</span
-                            >
-                        </div>
-                        <h2 class="text-2xl font-bold mb-4">
-                            Die Zukunft der KI-Entwicklung
-                        </h2>
-                        <p class="text-white/80 mb-6">
-                            Ein Ausblick auf kommende Trends und Entwicklungen
-                            im Bereich der künstlichen Intelligenz und deren
-                            Auswirkungen auf Unternehmen.
-                        </p>
-                        <a
-                            href="#"
-                            class="inline-flex items-center text-primary hover:text-primary-light transition-colors"
-                        >
-                            Weiterlesen
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-4 w-4 ml-2"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </article>
-
-                <!-- Blog Post Template -->
-                <article
-                    class="bg-background-light/5 rounded-xl overflow-hidden border border-white/10 hover:border-primary/50 transition-colors"
-                >
-                    <div class="aspect-video bg-background-light/10"></div>
-                    <div class="p-6">
-                        <div
-                            class="flex items-center gap-4 text-sm text-white/60 mb-4"
-                        >
-                            <time datetime="2024-01-10">10. Januar 2024</time>
-                            <span class="px-3 py-1 bg-primary/10 rounded-full"
-                                >Best Practices</span
-                            >
-                        </div>
-                        <h2 class="text-2xl font-bold mb-4">
-                            KI-Integration in Legacy-Systeme
-                        </h2>
-                        <p class="text-white/80 mb-6">
-                            Praktische Strategien und Lösungsansätze für die
-                            erfolgreiche Integration von KI in bestehende
-                            Systemlandschaften.
-                        </p>
-                        <a
-                            href="#"
-                            class="inline-flex items-center text-primary hover:text-primary-light transition-colors"
-                        >
-                            Weiterlesen
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="h-4 w-4 ml-2"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                            >
-                                <path
-                                    fill-rule="evenodd"
-                                    d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </a>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
+    <BlogPosts
+        limit={10}
+        showCategories={true}
+        title="Blog"
+        className="container-padding"
+    />
 </Layout>

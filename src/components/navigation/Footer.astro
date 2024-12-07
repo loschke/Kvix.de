@@ -26,69 +26,72 @@ const footerLinks = [
 ];
 ---
 
-<footer class="mt-auto border-t border-white/10">
-    <div class="container-padding py-16">
-        <div class="max-container">
-            <!-- Top Section -->
-            <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-4 mb-16">
-                <!-- Brand -->
-                <div class="lg:col-span-2">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div
-                            class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-lg font-bold"
+<footer class="mt-32 relative">
+    <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-transparent via-[#1a1f2e]/30 to-[#1a1f2e]/90"></div>
+    <div class="relative bg-gradient-to-b from-[#1a1f2e] to-[#111520] shadow-2xl">
+        <div class="container-padding py-16">
+            <div class="max-container">
+                <!-- Top Section -->
+                <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-4 mb-16">
+                    <!-- Brand -->
+                    <div class="lg:col-span-2">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-lg font-bold"
+                            >
+                                RL
+                            </div>
+                            <span class="text-xl font-medium">Rico Loschke</span>
+                        </div>
+                        <p class="text-white/80 max-w-md mb-8">
+                            Experte für künstliche Intelligenz und digitale
+                            Transformation. Ich unterstütze Unternehmen dabei, das
+                            volle Potenzial von KI zu erschließen.
+                        </p>
+                        <div class="mb-8">
+                            <SocialIcons />
+                        </div>
+                    </div>
+
+                    <!-- Links -->
+                    {
+                        footerLinks.map((section) => (
+                            <div>
+                                <h3 class="font-bold text-lg mb-4">
+                                    {section.title}
+                                </h3>
+                                <ul class="space-y-3">
+                                    {section.links.map((link) => (
+                                        <li>
+                                            <a
+                                                href={link.href}
+                                                class="text-white/70 hover:text-white transition-colors"
+                                            >
+                                                {link.label}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <!-- Bottom Section -->
+                <div
+                    class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4"
+                >
+                    <div class="text-white/60 text-sm">
+                        © {currentYear} Rico Loschke. Alle Rechte vorbehalten.
+                    </div>
+                    <div class="text-white/60 text-sm">
+                        <a
+                            href="mailto:kontakt@rico-loschke.de"
+                            class="hover:text-white transition-colors"
                         >
-                            RL
-                        </div>
-                        <span class="text-xl font-medium">Rico Loschke</span>
+                            kontakt@rico-loschke.de
+                        </a>
                     </div>
-                    <p class="text-white/80 max-w-md">
-                        Experte für künstliche Intelligenz und digitale
-                        Transformation. Ich unterstütze Unternehmen dabei, das
-                        volle Potenzial von KI zu erschließen.
-                    </p>
-                    <div class="mt-6">
-                        <SocialIcons />
-                    </div>
-                </div>
-
-                <!-- Links -->
-                {
-                    footerLinks.map((section) => (
-                        <div>
-                            <h3 class="font-bold text-lg mb-4">
-                                {section.title}
-                            </h3>
-                            <ul class="space-y-3">
-                                {section.links.map((link) => (
-                                    <li>
-                                        <a
-                                            href={link.href}
-                                            class="text-white/70 hover:text-white transition-colors"
-                                        >
-                                            {link.label}
-                                        </a>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))
-                }
-            </div>
-
-            <!-- Bottom Section -->
-            <div
-                class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4"
-            >
-                <div class="text-white/60 text-sm">
-                    © {currentYear} Rico Loschke. Alle Rechte vorbehalten.
-                </div>
-                <div class="text-white/60 text-sm">
-                    <a
-                        href="mailto:kontakt@rico-loschke.de"
-                        class="hover:text-white transition-colors"
-                    >
-                        kontakt@rico-loschke.de
-                    </a>
                 </div>
             </div>
         </div>

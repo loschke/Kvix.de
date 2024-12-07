@@ -1,0 +1,122 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+    limit?: number;
+    showLoadMore?: boolean;
+    title?: string;
+    description?: string;
+    showCategories?: boolean;
+    className?: string;
+}
+
+const { 
+    limit,
+    showLoadMore = false,
+    title,
+    description,
+    showCategories = false,
+    className = ""
+} = Astro.props;
+
+const posts = await getCollection("blog");
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const finalPosts = limit ? sortedPosts.slice(0, limit) : sortedPosts;
+const categories = showCategories ? [...new Set(posts.flatMap(post => post.data.categories || []))] : [];
+
+const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString('de-DE', {
+        year: 'numeric',
+        month: 'long'
+    });
+};
+---
+
+<section class={className}>
+    <div class="max-w-4xl mx-auto">
+        {(title || description) && (
+            <div class="text-center mb-16">
+                {title && (
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6" set:html={title} />
+                )}
+                {description && (
+                    <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                        {description}
+                    </p>
+                )}
+            </div>
+        )}
+
+        {showCategories && categories.length > 0 && (
+            <div class="mb-12">
+                <h2 class="text-xl font-bold mb-4">Kategorien</h2>
+                <div class="flex flex-wrap gap-2">
+                    {categories.map((category) => (
+                        <a
+                            href={`/blog/category/${category.toLowerCase()}`}
+                            class="px-3 py-1 bg-primary/10 rounded-full text-sm hover:bg-primary/20 transition-colors"
+                        >
+                            {category}
+                        </a>
+                    ))}
+                </div>
+            </div>
+        )}
+
+        <div class="flex flex-col gap-8">
+            {finalPosts.map(post => (
+                <a href={`/blog/${post.slug}`} class="block group">
+                    <article class="flex flex-col md:flex-row gap-6 bg-[#1b2432] rounded-xl overflow-hidden border border-white/10 group-hover:border-primary/50 transition-all duration-300 group-hover:bg-[#1f2838]">
+                        <div class="md:w-[45%]">
+                            {post.data.heroImage ? (
+                                <img
+                                    src={post.data.heroImage}
+                                    alt={post.data.title}
+                                    class="w-full h-full object-cover aspect-[16/9]"
+                                    {...(post.slug && { 'transition:name': `hero-${post.slug}` })}
+                                />
+                            ) : (
+                                <div class="w-full h-full bg-background-light/10 aspect-[16/9]"></div>
+                            )}
+                        </div>
+                        
+                        <div class="flex flex-col p-6 md:w-[55%]">
+                            <time datetime={post.data.pubDate.toISOString()} class="text-sm text-white/60 mb-4">
+                                {formatDate(post.data.pubDate)}
+                            </time>
+                            
+                            <h3 class="text-2xl font-bold mb-3 text-white/90 group-hover:text-primary transition-colors">
+                                {post.data.title}
+                            </h3>
+                            
+                            <p class="text-white/70 leading-relaxed mb-4 flex-grow">
+                                {post.data.description}
+                            </p>
+                            
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                {post.data.categories?.map((category) => (
+                                    <span
+                                        class="px-3 py-1 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors text-sm text-white/60"
+                                    >
+                                        {category}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </article>
+                </a>
+            ))}
+        </div>
+
+        {showLoadMore && (
+            <div class="mt-12 text-center">
+                <a href="/blog" class="inline-flex items-center px-6 py-3 text-lg font-medium text-white/90 hover:text-primary transition-colors">
+                    Alle Artikel ansehen
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        )}
+    </div>
+</section>
