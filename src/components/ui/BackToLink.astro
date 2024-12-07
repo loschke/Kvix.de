@@ -1,0 +1,16 @@
+---
+interface Props {
+    href: string;
+    text?: string;
+}
+
+const { href, text = "Zurück zum Blog" } = Astro.props;
+---
+
+<a
+    href={href}
+    class="inline-flex items-center px-4 py-2 bg-white/5 hover:bg-white/10 rounded-full text-white transition-colors no-underline"
+>
+    <span class="mr-2">←</span>
+    {text}
+</a>
