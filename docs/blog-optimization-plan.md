@@ -3,26 +3,31 @@
 ## Übersicht
 Dieser Plan beschreibt die schrittweise Optimierung des Blog-Systems mit Fokus auf Wartbarkeit, Performance und Astro-spezifische Best Practices. Jeder Meilenstein enthält testbare Zwischenschritte, um die Funktionalität während des Refactorings sicherzustellen.
 
+## Status
+🟢 In Bearbeitung: Meilenstein 1
+✅ Abgeschlossen: Phase 1.1
+⏳ Nächster Schritt: Phase 1.2
+
 ## Meilenstein 1: Astro Content Collections & TypeScript
 **Ziel**: Optimale Nutzung von Astro's Content Collections System
 
-### Phase 1.1: Content Schema Optimierung
-1. Implementierung:
+### Phase 1.1: Content Schema Optimierung ✅
+1. Implementierung: ✅
    - Verbesserung des `src/content/config.ts` mit Zod Schema
    - Integration von `astro:content` TypeScript Types
    - Implementierung von `CollectionEntry<"blog">` Types
 
-2. Tests:
+2. Tests: ✅
    - Content Collection Type Checking
    - Zod Schema Validation
    - TypeScript Compilation
 
-3. Erfolgskriterien:
+3. Erfolgskriterien: ✅
    - Typsichere Content Collections
    - Validierte Markdown Frontmatter
    - Keine TypeScript-Fehler
 
-### Phase 1.2: Astro Components & Islands
+### Phase 1.2: Astro Components & Islands ⏳
 1. Implementierung:
    - Optimierung der Client/Server Komponenten-Aufteilung
    - Nutzung von `client:*` Direktiven nur wo nötig
@@ -173,9 +178,15 @@ Für jeden Meilenstein wird ein Git-Branch erstellt. Bei Problemen:
 - Astro Best Practices implementiert
 
 ## Zeitplan
-- Meilenstein 1: 1-2 Wochen
+- Meilenstein 1: 1-2 Wochen ⏳ (Phase 1.1 ✅)
 - Meilenstein 2: 1-2 Wochen
 - Meilenstein 3: 1-2 Wochen
 - Meilenstein 4: 1-2 Wochen
 
 Gesamtdauer: 4-8 Wochen (abhängig von Ressourcen und Prioritäten)
+
+## Legende
+✅ Abgeschlossen
+🟢 In Bearbeitung
+⏳ Ausstehend
+❌ Problem/Blockiert

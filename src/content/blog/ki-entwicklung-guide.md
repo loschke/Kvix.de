@@ -6,6 +6,14 @@ heroImage: '/images/blog/ki-entwicklung-2024/hero.png'
 categories: ['KI', 'Technologie']
 tags: ['Artificial Intelligence', 'Machine Learning', 'Deep Learning', 'Neural Networks', 'Guide']
 draft: false
+featured: true
+author:
+  name: 'Rico Loschke'
+  avatar: '/images/rico-loschke_avatar.jpg'
+seo:
+  metaTitle: 'Umfassender Guide zur KI-Entwicklung 2024 - Trends und Best Practices'
+  metaDescription: 'Entdecken Sie die neuesten Entwicklungen, Trends und Herausforderungen im Bereich der künstlichen Intelligenz für das Jahr 2024.'
+  ogImage: '/images/blog/ki-entwicklung-2024/hero.png'
 ---
 
 ## Worum geht dieser Beitrag
