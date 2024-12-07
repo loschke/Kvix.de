@@ -1,5 +1,10 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import {
+    getCollection,
+    getEntry,
+    render,
+    type CollectionEntry,
+} from "astro:content";
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import BackToLink from "../../components/ui/BackToLink.astro";
@@ -8,12 +13,7 @@ import type { MarkdownHeading } from "astro";
 type BlogPost = CollectionEntry<"blog">;
 
 interface Props {
-    post: BlogPost;
-}
-
-interface RenderResult {
-    Content: any;
-    headings: MarkdownHeading[];
+    entry: BlogPost;
 }
 
 export async function getStaticPaths() {
@@ -21,14 +21,23 @@ export async function getStaticPaths() {
         return import.meta.env.PROD ? !data.draft : true;
     });
 
-    return posts.map((post: BlogPost) => ({
-        params: { slug: post.id },
-        props: { post },
-    }));
+    console.log(
+        "Available posts:",
+        posts.map((p) => ({ id: p.id })),
+    );
+
+    return posts.map((entry) => {
+        const path = {
+            params: { slug: entry.id },
+            props: { entry },
+        };
+        console.log("Generating path:", path);
+        return path;
+    });
 }
 
-const { post } = Astro.props;
-const { Content } = await post.render();
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
 
 const formatDate = (date: Date): string => {
     try {
@@ -43,27 +52,23 @@ const formatDate = (date: Date): string => {
 
 // Prepare SEO metadata
 const seoTitle =
-    post.data.seo?.metaTitle || `${post.data.title} - Rico Loschke`;
-const seoDescription = post.data.seo?.metaDescription || post.data.description;
-const ogImage = post.data.seo?.ogImage || post.data.heroImage;
+    entry.data.seo?.metaTitle || `${entry.data.title} - Rico Loschke`;
+const seoDescription =
+    entry.data.seo?.metaDescription || entry.data.description;
+const ogImage = entry.data.seo?.ogImage || entry.data.heroImage;
 
 // Prepare author data
-const authorName = post.data.author?.name || "Rico Loschke";
+const authorName = entry.data.author?.name || "Rico Loschke";
 const authorAvatar =
-    post.data.author?.avatar || "/images/rico-loschke_avatar.jpg";
+    entry.data.author?.avatar || "/images/rico-loschke_avatar.jpg";
 
 // Prepare article metadata
 const articleMetadata = {
-    publishedTime: post.data.pubDate.toISOString(),
-    modifiedTime: post.data.updatedDate?.toISOString(),
+    publishedTime: entry.data.pubDate.toISOString(),
+    modifiedTime: entry.data.updatedDate?.toISOString(),
     authors: [authorName],
-    tags: post.data.tags || [],
+    tags: entry.data.tags || [],
 };
-
-// Get headings from the rendered content
-const headings = await post
-    .render()
-    .then((result: RenderResult) => result.headings);
 ---
 
 <Layout
@@ -71,19 +76,19 @@ const headings = await post
     description={seoDescription}
     ogImage={ogImage}
     article={articleMetadata}
-    canonicalURL={post.data.seo?.canonicalURL}
+    canonicalURL={entry.data.seo?.canonicalURL}
 >
     <!-- Hero Section -->
     <div class="max-w-4xl mx-auto px-4 sm:px-6 pb-12">
         {
-            post.data.heroImage && (
+            entry.data.heroImage && (
                 <div class="relative w-full aspect-[16/9] mb-8">
                     <img
-                        src={post.data.heroImage}
-                        alt={post.data.title}
+                        src={entry.data.heroImage}
+                        alt={entry.data.title}
                         class="w-full h-full object-cover rounded-xl"
                         loading="eager"
-                        transition:name={`hero-${post.id}`}
+                        transition:name={`hero-${entry.id}`}
                     />
                 </div>
             )
@@ -91,42 +96,42 @@ const headings = await post
 
         <div class="text-center">
             {
-                post.data.pubDate && (
+                entry.data.pubDate && (
                     <time
-                        datetime={post.data.pubDate.toISOString()}
+                        datetime={entry.data.pubDate.toISOString()}
                         class="text-white/60"
-                        transition:name={`date-${post.id}`}
+                        transition:name={`date-${entry.id}`}
                     >
-                        {formatDate(post.data.pubDate)}
+                        {formatDate(entry.data.pubDate)}
                     </time>
                 )
             }
 
             <h1
                 class="text-4xl md:text-5xl font-bold my-6"
-                transition:name={`title-${post.id}`}
+                transition:name={`title-${entry.id}`}
             >
-                {post.data.title}
+                {entry.data.title}
             </h1>
 
             {
-                post.data.description && (
+                entry.data.description && (
                     <p
                         class="text-xl text-white/80"
-                        transition:name={`excerpt-${post.id}`}
+                        transition:name={`excerpt-${entry.id}`}
                     >
-                        {post.data.description}
+                        {entry.data.description}
                     </p>
                 )
             }
 
             {
-                post.data.categories && post.data.categories.length > 0 && (
+                entry.data.categories && entry.data.categories.length > 0 && (
                     <div
                         class="flex flex-wrap justify-center gap-2 mt-6"
-                        transition:name={`categories-${post.id}`}
+                        transition:name={`categories-${entry.id}`}
                     >
-                        {post.data.categories.map((category: string) => (
+                        {entry.data.categories.map((category: string) => (
                             <a
                                 href={`/blog/category/${category.toLowerCase()}`}
                                 class="px-3 py-1 bg-white/5 rounded-full text-sm hover:bg-white/10 transition-colors"
@@ -164,14 +169,14 @@ const headings = await post
                         <Content />
 
                         {
-                            post.data.tags && post.data.tags.length > 0 && (
+                            entry.data.tags && entry.data.tags.length > 0 && (
                                 <div class="mt-12 pt-8 border-t border-white/5">
                                     <div
                                         class="flex flex-wrap gap-2"
                                         role="list"
                                         aria-label="Artikel-Tags"
                                     >
-                                        {post.data.tags.map((tag: string) => (
+                                        {entry.data.tags.map((tag: string) => (
                                             <a
                                                 href={`/blog/tag/${tag.toLowerCase()}`}
                                                 class="px-3 py-1 bg-white/5 rounded-full text-sm hover:bg-white/10 transition-colors text-white/80 hover:text-white"
