@@ -20,7 +20,7 @@ const blogSchema = z.object({
     updatedDate: z.coerce.date().optional(),
 
     // Media - using image() helper for optimization
-    heroImage: z.string(),
+    heroImage: z.string().optional(),
 
     // Taxonomy
     categories: z.array(z.string()).min(1).default(['Allgemein']),
