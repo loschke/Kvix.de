@@ -16,17 +16,8 @@ const blogSchema = z.object({
     description: z.string().min(10).max(160),
 
     // Date handling
-    pubDate: z.coerce.date()
-        .or(z.string().transform(str => new Date(str)))
-        .refine((date) => !isNaN(date.getTime()), {
-            message: "Invalid date format",
-        }),
-    updatedDate: z.coerce.date()
-        .or(z.string().transform(str => new Date(str)))
-        .refine((date) => !isNaN(date.getTime()), {
-            message: "Invalid date format",
-        })
-        .optional(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
 
     // Media
     heroImage: z.string().optional(),
@@ -61,22 +52,12 @@ const blogSchema = z.object({
 });
 
 // Define the collection
-const blogCollection = defineCollection({
+const blog = defineCollection({
     type: 'content',
     schema: blogSchema,
 });
 
 // Export the collections
 export const collections = {
-    'blog': blogCollection,
-};
-
-// Export TypeScript types
-export type BlogSchema = z.infer<typeof blogSchema>;
-export type BlogEntry = {
-    id: string;
-    slug: string;
-    body: string;
-    collection: 'blog';
-    data: BlogSchema;
+    blog,
 };
