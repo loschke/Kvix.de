@@ -17,9 +17,9 @@ export default {
 					DEFAULT: '#E91E63',
 					dark: '#D81B60'
 				},
-				accent: '#FA186B',
+				accent: '#1C7CFF',
 				content: {
-					DEFAULT: '#FA186B',
+					DEFAULT: '#1C7CFF',
 					light: '#ffffff'
 				}
 			},

@@ -1,0 +1,158 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+    title="Kontakt - Rico Loschke"
+    description="Kontaktieren Sie mich für Fragen, Projektanfragen oder Zusammenarbeit im Bereich KI und Softwareentwicklung."
+>
+    <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-12">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6" transition:name="page-title">Kontakt</h1>
+            <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                Haben Sie Fragen oder möchten Sie ein Projekt besprechen? 
+                Ich freue mich auf Ihre Nachricht.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <!-- Contact Form Column -->
+            <div class="relative overflow-hidden rounded-xl border border-white/10 bg-[rgb(27,36,50)] backdrop-blur-sm p-8">
+                <form action="#" method="POST" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-white/90 font-medium mb-2">Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            required
+                            class="w-full px-6 py-3 rounded-lg bg-white/[0.02] border border-white/10 
+                                   text-white placeholder:text-white/40 
+                                   focus:outline-none focus:border-primary/50 focus:bg-white/[0.04]
+                                   transition-all duration-300"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-white/90 font-medium mb-2">E-Mail</label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            required
+                            class="w-full px-6 py-3 rounded-lg bg-white/[0.02] border border-white/10 
+                                   text-white placeholder:text-white/40 
+                                   focus:outline-none focus:border-primary/50 focus:bg-white/[0.04]
+                                   transition-all duration-300"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="subject" class="block text-white/90 font-medium mb-2">Betreff</label>
+                        <input
+                            type="text"
+                            name="subject"
+                            id="subject"
+                            required
+                            class="w-full px-6 py-3 rounded-lg bg-white/[0.02] border border-white/10 
+                                   text-white placeholder:text-white/40 
+                                   focus:outline-none focus:border-primary/50 focus:bg-white/[0.04]
+                                   transition-all duration-300"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="message" class="block text-white/90 font-medium mb-2">Nachricht</label>
+                        <textarea
+                            name="message"
+                            id="message"
+                            rows="4"
+                            required
+                            class="w-full px-6 py-3 rounded-lg bg-white/[0.02] border border-white/10 
+                                   text-white placeholder:text-white/40 
+                                   focus:outline-none focus:border-primary/50 focus:bg-white/[0.04]
+                                   transition-all duration-300 resize-y"
+                        ></textarea>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="w-full px-6 py-3 bg-primary text-white font-medium rounded-lg
+                               hover:bg-primary/90 transform hover:-translate-y-0.5
+                               transition-all duration-300 focus:outline-none focus:ring-2 
+                               focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-base"
+                    >
+                        Nachricht senden
+                    </button>
+                </form>
+            </div>
+
+            <!-- Alternative Contact Options Column -->
+            <div class="relative overflow-hidden rounded-xl border border-white/10 bg-[rgb(27,36,50)] backdrop-blur-sm p-8">
+                <!-- LinkedIn Section -->
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4">LinkedIn</h2>
+                    <p class="text-white/80 mb-6 leading-relaxed">
+                        Lassen Sie uns auf LinkedIn vernetzen! Dort teile ich regelmäßig Einblicke in meine Arbeit 
+                        und Gedanken zur KI-Entwicklung.
+                    </p>
+                    <a 
+                        href="https://www.linkedin.com/in/rico-loschke/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center px-6 py-3 bg-[#0A66C2] text-white rounded-lg
+                               hover:bg-[#004182] transform hover:-translate-y-0.5
+                               transition-all duration-300 focus:outline-none focus:ring-2 
+                               focus:ring-[#0A66C2]/50 focus:ring-offset-2 focus:ring-offset-base"
+                    >
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        Auf LinkedIn verbinden
+                    </a>
+                </div>
+
+                <div class="mb-12">
+                    <h2 class="text-2xl font-bold mb-4">E-Mail</h2>
+                    <a 
+                        href="mailto:kontakt@kvix.de" 
+                        class="text-accent hover:text-accent/80 text-lg font-medium
+                               transition-colors duration-300"
+                    >
+                        kontakt@kvix.de
+                    </a>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl font-bold mb-4">Websites & Projekte</h2>
+                    <ul class="space-y-6">
+                        <li>
+                            <a href="https://kvix.de" class="block group">
+                                <span class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300">
+                                    kvix.de
+                                </span>
+                                <span class="text-white/60 block mt-1">Hauptwebsite</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://blog.kvix.de" class="block group">
+                                <span class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300">
+                                    blog.kvix.de
+                                </span>
+                                <span class="text-white/60 block mt-1">Tech Blog</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/ricoloschke" target="_blank" rel="noopener noreferrer" class="block group">
+                                <span class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300">
+                                    GitHub
+                                </span>
+                                <span class="text-white/60 block mt-1">Open Source Projekte</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>

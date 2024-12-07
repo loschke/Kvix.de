@@ -27,12 +27,6 @@
 
     body {
         @apply bg-base text-white min-h-screen overflow-x-hidden;
-        background: linear-gradient(45deg,
-                rgba(17, 24, 39, 1) 0%,
-                rgba(31, 41, 55, 1) 50%,
-                rgba(17, 24, 39, 1) 100%);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
     }
 
     /* Typography System */
@@ -102,6 +96,15 @@
 
     .flex-between {
         @apply flex items-center justify-between;
+    }
+
+    .animated-gradient-bg {
+        background: linear-gradient(45deg,
+                rgba(17, 24, 39, 1) 0%,
+                rgba(31, 41, 55, 1) 50%,
+                rgba(17, 24, 39, 1) 100%);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
     }
 }
 
