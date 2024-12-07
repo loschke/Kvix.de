@@ -1,30 +1,44 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
 import BlogPosts from "../../../components/blog/BlogPosts.astro";
 import BackToLink from "../../../components/ui/BackToLink.astro";
+import {
+    getBlogPosts,
+    getUniqueTags,
+    filterPostsByTag,
+} from "../../../utils/blog";
 
 export async function getStaticPaths() {
-    const posts = await getCollection("blog", ({ data }) => {
-        return import.meta.env.PROD ? !data.draft : true;
+    const posts = await getBlogPosts();
+    const tags = getUniqueTags(posts);
+
+    return tags.map((tag) => {
+        const filteredPosts = filterPostsByTag(posts, tag);
+
+        // If no posts found for this tag, it will redirect to 404
+        if (filteredPosts.length === 0) {
+            return {
+                params: { tag: tag.toLowerCase() },
+                props: { tag: null, posts: [] },
+            };
+        }
+
+        return {
+            params: { tag: tag.toLowerCase() },
+            props: {
+                tag,
+                posts: filteredPosts,
+            },
+        };
     });
-
-    const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
-
-    return tags.map((tag) => ({
-        params: { tag: tag.toLowerCase() },
-        props: {
-            tag,
-            posts: posts.filter((post) =>
-                post.data.tags
-                    .map((t) => t.toLowerCase())
-                    .includes(tag.toLowerCase()),
-            ),
-        },
-    }));
 }
 
 const { tag, posts } = Astro.props;
+
+// Redirect to 404 if tag not found or has no posts
+if (!tag || posts.length === 0) {
+    return Astro.redirect("/404");
+}
 ---
 
 <Layout

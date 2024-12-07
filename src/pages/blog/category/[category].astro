@@ -1,32 +1,44 @@
 ---
-import { getCollection } from "astro:content";
 import Layout from "../../../layouts/Layout.astro";
 import BlogPosts from "../../../components/blog/BlogPosts.astro";
 import BackToLink from "../../../components/ui/BackToLink.astro";
+import {
+    getBlogPosts,
+    getUniqueCategories,
+    filterPostsByCategory,
+} from "../../../utils/blog";
 
 export async function getStaticPaths() {
-    const posts = await getCollection("blog", ({ data }) => {
-        return import.meta.env.PROD ? !data.draft : true;
+    const posts = await getBlogPosts();
+    const categories = getUniqueCategories(posts);
+
+    return categories.map((category) => {
+        const filteredPosts = filterPostsByCategory(posts, category);
+
+        // If no posts found for this category, it will redirect to 404
+        if (filteredPosts.length === 0) {
+            return {
+                params: { category: category.toLowerCase() },
+                props: { category: null, posts: [] },
+            };
+        }
+
+        return {
+            params: { category: category.toLowerCase() },
+            props: {
+                category,
+                posts: filteredPosts,
+            },
+        };
     });
-
-    const categories = [
-        ...new Set(posts.flatMap((post) => post.data.categories)),
-    ];
-
-    return categories.map((category) => ({
-        params: { category: category.toLowerCase() },
-        props: {
-            category,
-            posts: posts.filter((post) =>
-                post.data.categories
-                    .map((c) => c.toLowerCase())
-                    .includes(category.toLowerCase()),
-            ),
-        },
-    }));
 }
 
 const { category, posts } = Astro.props;
+
+// Redirect to 404 if category not found or has no posts
+if (!category || posts.length === 0) {
+    return Astro.redirect("/404");
+}
 ---
 
 <Layout

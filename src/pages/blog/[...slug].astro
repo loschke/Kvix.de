@@ -1,34 +1,60 @@
 ---
-import {
-    getCollection,
-    getEntry,
-    render,
-    type CollectionEntry,
-} from "astro:content";
+import { type MarkdownHeading } from "astro";
 import { Picture } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import BackToLink from "../../components/ui/BackToLink.astro";
-import type { MarkdownHeading } from "astro";
-
-type BlogPost = CollectionEntry<"blog">;
+import {
+    getBlogPosts,
+    validateAndGetPost,
+    type BlogPost,
+} from "../../utils/blog";
 
 interface Props {
     entry: BlogPost;
 }
 
 export async function getStaticPaths() {
-    const posts = await getCollection("blog", ({ data }: BlogPost) => {
-        return import.meta.env.PROD ? !data.draft : true;
-    });
+    const posts = await getBlogPosts();
 
-    return posts.map((entry) => ({
-        params: { slug: entry.id },
-        props: { entry },
-    }));
+    return Promise.all(
+        posts.map(async (entry) => {
+            // Use the new validateAndGetPost function for better validation
+            const post = await validateAndGetPost(entry.id);
+
+            if (!post) {
+                // Return a 404 response for invalid posts
+                return {
+                    params: { slug: entry.id },
+                    props: { entry: null },
+                };
+            }
+
+            return {
+                params: { slug: entry.id },
+                props: { entry: post },
+            };
+        }),
+    );
 }
 
+// Get the entry from props
 const { entry } = Astro.props;
-const { Content, headings } = await render(entry);
+
+// Redirect to 404 if post not found
+if (!entry) {
+    return Astro.redirect("/404", 404);
+}
+
+// Render the content with error handling
+let Content, headings;
+try {
+    const rendered = await entry.render();
+    Content = rendered.Content;
+    headings = rendered.headings;
+} catch (error) {
+    console.error(`Error rendering post ${entry.id}:`, error);
+    return Astro.redirect("/404", 404);
+}
 
 const formatDate = (date: Date): string => {
     try {
@@ -48,12 +74,12 @@ const seoDescription =
     entry.data.seo?.metaDescription || entry.data.description;
 const ogImage = entry.data.seo?.ogImage || entry.data.heroImage;
 
-// Prepare author data
+// Prepare author data with fallbacks
 const authorName = entry.data.author?.name || "Rico Loschke";
 const authorAvatar =
     entry.data.author?.avatar || "/images/rico-loschke_avatar.jpg";
 
-// Prepare article metadata
+// Prepare article metadata for SEO
 const articleMetadata = {
     publishedTime: entry.data.pubDate.toISOString(),
     modifiedTime: entry.data.updatedDate?.toISOString(),
@@ -196,7 +222,7 @@ const articleMetadata = {
 
             <!-- Table of Contents -->
             {
-                headings.length > 0 && (
+                headings && headings.length > 0 && (
                     <aside
                         class="hidden xl:block w-80 shrink-0"
                         aria-label="Inhaltsverzeichnis"

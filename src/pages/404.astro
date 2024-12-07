@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/ui/Button.astro";
+---
+
+<Layout
+    title="404: Seite nicht gefunden - Rico Loschke"
+    description="Die angeforderte Seite konnte nicht gefunden werden."
+>
+    <div
+        class="min-h-[50vh] flex flex-col items-center justify-center text-center px-4"
+    >
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">404</h1>
+        <p class="text-xl text-white/80 mb-8">
+            Diese Seite konnte nicht gefunden werden.
+        </p>
+        <Button href="/" variant="primary"> Zurück zur Startseite </Button>
+    </div>
+</Layout>
