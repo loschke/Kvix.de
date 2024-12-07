@@ -5,7 +5,7 @@ import {
     render,
     type CollectionEntry,
 } from "astro:content";
-import { Image } from "astro:assets";
+import { Picture } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import BackToLink from "../../components/ui/BackToLink.astro";
 import type { MarkdownHeading } from "astro";
@@ -21,19 +21,10 @@ export async function getStaticPaths() {
         return import.meta.env.PROD ? !data.draft : true;
     });
 
-    console.log(
-        "Available posts:",
-        posts.map((p) => ({ id: p.id })),
-    );
-
-    return posts.map((entry) => {
-        const path = {
-            params: { slug: entry.id },
-            props: { entry },
-        };
-        console.log("Generating path:", path);
-        return path;
-    });
+    return posts.map((entry) => ({
+        params: { slug: entry.id },
+        props: { entry },
+    }));
 }
 
 const { entry } = Astro.props;
@@ -83,13 +74,15 @@ const articleMetadata = {
         {
             entry.data.heroImage && (
                 <div class="relative w-full aspect-[16/9] mb-8">
-                    <Image
+                    <Picture
                         src={entry.data.heroImage}
                         alt={entry.data.title}
+                        formats={["avif", "webp"]}
+                        fallbackFormat="png"
                         width={1200}
                         height={675}
-                        class="w-full h-full object-cover rounded-xl"
                         loading="eager"
+                        class="w-full h-full object-cover rounded-xl"
                         transition:name={`hero-${entry.id}`}
                     />
                 </div>
@@ -147,9 +140,11 @@ const articleMetadata = {
             }
 
             <div class="flex items-center justify-center mt-6 gap-3">
-                <Image
+                <Picture
                     src={authorAvatar}
                     alt={authorName}
+                    formats={["avif", "webp"]}
+                    fallbackFormat="jpg"
                     width={40}
                     height={40}
                     class="rounded-full"
