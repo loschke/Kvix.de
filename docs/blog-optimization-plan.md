@@ -4,16 +4,15 @@
 Dieser Plan beschreibt die schrittweise Optimierung des Blog-Systems mit Fokus auf Wartbarkeit, Performance und Astro-spezifische Best Practices. Jeder Meilenstein enthält testbare Zwischenschritte, um die Funktionalität während des Refactorings sicherzustellen.
 
 ## Status
-🟢 In Bearbeitung: Meilenstein 1
-✅ Abgeschlossen: Phase 1.1
-⏳ Nächster Schritt: Phase 1.2
+✅ Abgeschlossen: Meilenstein 1 (Content Collections & TypeScript)
+⏳ Nächster Schritt: Meilenstein 2 (Performance Optimierung)
 
-## Meilenstein 1: Astro Content Collections & TypeScript
+## Meilenstein 1: Astro Content Collections & TypeScript ✅
 **Ziel**: Optimale Nutzung von Astro's Content Collections System
 
 ### Phase 1.1: Content Schema Optimierung ✅
 1. Implementierung: ✅
-   - Verbesserung des `src/content/config.ts` mit Zod Schema
+   - Verbesserung des `src/content.config.ts` mit Zod Schema
    - Integration von `astro:content` TypeScript Types
    - Implementierung von `CollectionEntry<"blog">` Types
 
@@ -27,23 +26,23 @@ Dieser Plan beschreibt die schrittweise Optimierung des Blog-Systems mit Fokus a
    - Validierte Markdown Frontmatter
    - Keine TypeScript-Fehler
 
-### Phase 1.2: Astro Components & Islands ⏳
-1. Implementierung:
+### Phase 1.2: Astro Components & Islands ✅
+1. Implementierung: ✅
    - Optimierung der Client/Server Komponenten-Aufteilung
-   - Nutzung von `client:*` Direktiven nur wo nötig
+   - Migration zur Content Layer API
    - Implementierung von Props-Interfaces für `.astro` Komponenten
 
-2. Tests:
+2. Tests: ✅
    - Hydration Patterns
    - Bundle Size Analysis
    - Component Integration Tests
 
-3. Erfolgskriterien:
+3. Erfolgskriterien: ✅
    - Minimale JavaScript-Bundle-Größe
    - Optimale Hydration Strategie
    - Typsichere Komponenten
 
-## Meilenstein 2: Astro Performance Optimierung
+## Meilenstein 2: Astro Performance Optimierung ⏳
 **Ziel**: Maximale Nutzung von Astro's Performance Features
 
 ### Phase 2.1: Asset Optimization
@@ -178,8 +177,8 @@ Für jeden Meilenstein wird ein Git-Branch erstellt. Bei Problemen:
 - Astro Best Practices implementiert
 
 ## Zeitplan
-- Meilenstein 1: 1-2 Wochen ⏳ (Phase 1.1 ✅)
-- Meilenstein 2: 1-2 Wochen
+- Meilenstein 1: 1-2 Wochen ✅
+- Meilenstein 2: 1-2 Wochen ⏳
 - Meilenstein 3: 1-2 Wochen
 - Meilenstein 4: 1-2 Wochen
 
@@ -190,3 +189,14 @@ Gesamtdauer: 4-8 Wochen (abhängig von Ressourcen und Prioritäten)
 🟢 In Bearbeitung
 ⏳ Ausstehend
 ❌ Problem/Blockiert
+
+## Aktueller Stand (2024-01-26)
+1. Meilenstein 1 (Content Collections & TypeScript) ✅
+   - Content Schema Optimierung abgeschlossen
+   - Astro Components & Islands optimiert
+   - Migration zur Content Layer API erfolgreich
+   - Alle TypeScript-Fehler behoben
+
+2. Nächste Schritte:
+   - Start mit Meilenstein 2: Performance Optimierung
+   - Fokus auf Asset Optimization und Static Site Generation

@@ -1,129 +1,160 @@
-console.log('TOC script loaded');
+// Types
+interface TOCHeading extends HTMLElement {
+    id: string;
+    textContent: string | null;
+}
 
-function initTOC() {
-    console.log('Initializing TOC');
+interface TOCItem extends HTMLElement {
+    dataset: {
+        heading: string;
+    };
+}
 
-    // Warte bis der Content vollständig gerendert ist
-    setTimeout(() => {
-        const headings = Array.from(document.querySelectorAll<HTMLElement>(
-            ".prose h1[id], .prose h2[id], .prose h3[id], .prose h4[id], .prose h5[id], .prose h6[id]"
-        ));
-        const tocItems = document.querySelectorAll<HTMLElement>(".toc-item");
+// Constants
+const SCROLL_BUFFER = 150;
+const SCROLL_OFFSET = 100;
+const INIT_DELAY = 100;
 
-        console.log('Found headings:', headings.map(h => ({ id: h.id, text: h.textContent })));
-        console.log('Found TOC items:', tocItems.length);
+// Utility functions
+const debug = (message: string, data?: unknown): void => {
+    if (import.meta.env.DEV) {
+        console.log(`[TOC] ${message}`, data || '');
+    }
+};
 
-        if (!headings.length || !tocItems.length) {
-            console.log('No headings or TOC items found');
-            return;
+const getHeadings = (): TOCHeading[] => {
+    return Array.from(document.querySelectorAll<TOCHeading>(
+        ".prose h1[id], .prose h2[id], .prose h3[id], .prose h4[id], .prose h5[id], .prose h6[id]"
+    ));
+};
+
+const getTOCItems = (): TOCItem[] => {
+    return Array.from(document.querySelectorAll<TOCItem>(".toc-item"));
+};
+
+const getActiveHeadingIndex = (headings: TOCHeading[]): number => {
+    const scrollPosition = window.scrollY;
+
+    for (let i = headings.length - 1; i >= 0; i--) {
+        const heading = headings[i];
+        const headingTop = heading.getBoundingClientRect().top + scrollPosition;
+
+        if (scrollPosition >= headingTop - SCROLL_BUFFER) {
+            return i;
         }
+    }
 
-        function getActiveHeadingIndex(headings: HTMLElement[]): number {
-            const scrollPosition = window.scrollY;
-            const buffer = 150; // Puffer für bessere Erkennung
+    return 0;
+};
 
-            for (let i = headings.length - 1; i >= 0; i--) {
-                const heading = headings[i];
-                const headingTop = heading.getBoundingClientRect().top + scrollPosition;
+const updateActiveHeading = (headings: TOCHeading[], tocItems: TOCItem[]): void => {
+    const activeIndex = getActiveHeadingIndex(headings);
+    const activeHeading = headings[activeIndex];
 
-                if (scrollPosition >= headingTop - buffer) {
-                    return i;
-                }
-            }
+    if (!activeHeading) return;
 
-            return 0;
-        }
+    debug('Active heading:', activeHeading.id);
 
-        function updateActiveHeading() {
-            const activeIndex = getActiveHeadingIndex(headings);
-            const activeHeading = headings[activeIndex];
+    tocItems.forEach(item => {
+        const isActive = item.dataset.heading === activeHeading.id;
+        item.classList.toggle('active', isActive);
+    });
+};
 
-            if (!activeHeading) return;
+const scrollToHeading = (id: string): void => {
+    const heading = document.getElementById(id);
+    if (!heading) return;
 
-            console.log('Active heading:', activeHeading.id);
+    const elementPosition = heading.getBoundingClientRect().top;
+    const offsetPosition = elementPosition + window.pageYOffset - SCROLL_OFFSET;
 
-            // Aktualisiere TOC
-            tocItems.forEach(item => {
-                const headingId = item.getAttribute('data-heading');
-                const isActive = headingId === activeHeading.id;
+    window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+    });
 
-                if (isActive && !item.classList.contains('active')) {
-                    item.classList.add('active');
-                } else if (!isActive && item.classList.contains('active')) {
-                    item.classList.remove('active');
-                }
+    history.pushState(null, '', `#${id}`);
+};
+
+type CleanupFunction = () => void;
+
+// Main initialization function
+const initTOC = async (): Promise<CleanupFunction | void> => {
+    debug('Initializing TOC');
+
+    // Wait for content to be fully rendered
+    await new Promise<void>((resolve) => {
+        setTimeout(resolve, INIT_DELAY);
+    });
+
+    const headings = getHeadings();
+    const tocItems = getTOCItems();
+
+    debug('Found headings:', headings.map(h => ({ id: h.id, text: h.textContent })));
+    debug('Found TOC items:', tocItems.length);
+
+    if (!headings.length || !tocItems.length) {
+        debug('No headings or TOC items found');
+        return;
+    }
+
+    // Optimized scroll handler with requestAnimationFrame
+    let isScrolling = false;
+    const onScroll = (): void => {
+        if (!isScrolling) {
+            isScrolling = true;
+            requestAnimationFrame(() => {
+                updateActiveHeading(headings, tocItems);
+                isScrolling = false;
             });
         }
+    };
 
-        // Optimierte Scroll-Handler-Funktion mit Throttling
-        let isScrolling = false;
-        function onScroll() {
-            if (!isScrolling) {
-                isScrolling = true;
-                requestAnimationFrame(() => {
-                    updateActiveHeading();
-                    isScrolling = false;
-                });
+    // Event Listeners
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+
+    // Click handlers
+    tocItems.forEach(item => {
+        item.addEventListener('click', (e: Event) => {
+            e.preventDefault();
+            const headingId = item.dataset.heading;
+            if (headingId) {
+                scrollToHeading(headingId);
+                tocItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
             }
-        }
-
-        // Event Listeners
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', onScroll, { passive: true });
-
-        // Click handler
-        tocItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const id = item.getAttribute('data-heading');
-                if (id) {
-                    const heading = document.getElementById(id);
-                    if (heading) {
-                        // Scroll mit Offset
-                        const offset = 100;
-                        const elementPosition = heading.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-                        window.scrollTo({
-                            top: offsetPosition,
-                            behavior: 'smooth'
-                        });
-
-                        history.pushState(null, '', `#${id}`);
-
-                        // Aktualisiere aktives Element nach dem Klick
-                        tocItems.forEach(i => i.classList.remove('active'));
-                        item.classList.add('active');
-                    }
-                }
-            });
         });
+    });
 
-        // Initiale Aktualisierung
-        updateActiveHeading();
-        console.log('TOC initialization completed');
+    // Initial update
+    updateActiveHeading(headings, tocItems);
+    debug('TOC initialization completed');
 
-        // Cleanup
-        return () => {
-            window.removeEventListener('scroll', onScroll);
-            window.removeEventListener('resize', onScroll);
-        };
-    }, 100); // Kleine Verzögerung für sicheres Rendering
-}
+    // Return cleanup function
+    return () => {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+    };
+};
 
-// Exportiere die Setup-Funktion
-export function setupTOC() {
-    console.log('Setting up TOC');
-    return initTOC();
-}
+// Export setup function
+export const setupTOC = async (): Promise<void> => {
+    debug('Setting up TOC');
+    try {
+        await initTOC();
+    } catch (error: unknown) {
+        console.error('[TOC] Setup failed:', error instanceof Error ? error.message : 'Unknown error');
+    }
+};
 
-// Führe Setup bei verschiedenen Ereignissen aus
+// Initialize on various events
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupTOC);
+    document.addEventListener('DOMContentLoaded', () => void setupTOC());
 } else {
-    setupTOC();
+    void setupTOC();
 }
 
-// Reagiere auf Astro's View Transitions
-document.addEventListener('astro:page-load', setupTOC);
-document.addEventListener('astro:after-swap', setupTOC);
+// Handle Astro View Transitions
+document.addEventListener('astro:page-load', () => void setupTOC());
+document.addEventListener('astro:after-swap', () => void setupTOC());
