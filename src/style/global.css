@@ -26,7 +26,37 @@
     }
 
     body {
-        @apply bg-base text-white min-h-screen overflow-x-hidden;
+        @apply bg-base text-white min-h-screen overflow-x-hidden relative;
+    }
+
+    /* Add animated background */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        @apply bg-gradient-to-br from-primary-dark via-base to-accent;
+        opacity: 0.4;
+        z-index: -1;
+        animation: gradient 20s ease infinite;
+        background-size: 200% 200%;
+    }
+
+    @keyframes gradient {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    :global(.dark) body::before {
+        filter: brightness(0.8) saturate(0.9);
     }
 
     /* Typography System */
