@@ -3,7 +3,7 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   site: 'https://kvix.de',
-  output: 'hybrid', // Enable hybrid rendering
+  output: 'static', // Changed from 'hybrid' to 'static' for Astro 5 compatibility
   integrations: [tailwind()],
   markdown: {
     shikiConfig: {
