@@ -8,6 +8,8 @@ import {
     filterPostsByTag,
 } from "../../../utils/blog";
 
+export const prerender = true;
+
 export async function getStaticPaths() {
     const posts = await getBlogPosts();
     const tags = getUniqueTags(posts);

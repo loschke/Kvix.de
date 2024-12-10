@@ -3,7 +3,7 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   site: 'https://kvix.de',
-  output: 'server', // Enable server-side rendering
+  output: 'hybrid', // Enable hybrid rendering
   integrations: [tailwind()],
   markdown: {
     shikiConfig: {

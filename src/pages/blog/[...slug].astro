@@ -5,15 +5,9 @@ import Layout from "../../layouts/Layout.astro";
 import ErrorLayout from "../../layouts/ErrorLayout.astro";
 import BackToLink from "../../components/ui/BackToLink.astro";
 import ErrorBoundary from "../../components/ui/ErrorBoundary.astro";
-import {
-    getBlogPosts,
-    validateAndGetPost,
-    type BlogPost,
-} from "../../utils/blog";
+import { getBlogPosts, type BlogPost } from "../../utils/blog";
 
-interface Props {
-    entry: BlogPost;
-}
+export const prerender = true;
 
 export async function getStaticPaths() {
     const posts = await getBlogPosts();
@@ -21,43 +15,30 @@ export async function getStaticPaths() {
 
     for (const post of posts) {
         // Strip .md from the ID if it exists
-        const baseId = post.id.replace(/\.md$/, '');
-        
+        const baseId = post.id.replace(/\.md$/, "");
+
         // Add path without .md extension
         paths.push({
             params: { slug: baseId },
             props: { entry: post },
         });
 
-        // Add path with .md extension
+        // Add path with .md extension for 301 redirect
         paths.push({
             params: { slug: `${baseId}.md` },
-            props: { entry: post },
+            props: { entry: post, redirect: true },
         });
     }
-
-    // Debug log
-    console.log('Generated paths:', paths.map(p => p.params.slug));
 
     return paths;
 }
 
-const { entry } = Astro.props;
+const { entry, redirect = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 
-// Redirect .md URLs to clean URLs
-if (currentPath.endsWith('.md')) {
-    return Astro.redirect(currentPath.replace(/\.md$/, ''), 301);
-}
-
-// Handle 404 case
-if (!entry) {
-    return new Response(null, {
-        status: 404,
-        headers: {
-            Location: "/404",
-        },
-    });
+// Handle 301 redirect for .md URLs
+if (redirect || currentPath.endsWith(".md")) {
+    return Astro.redirect(currentPath.replace(/\.md$/, ""), 301);
 }
 
 // Render content with error handling
