@@ -3,6 +3,7 @@ import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   site: 'https://kvix.de',
+  output: 'server', // Enable server-side rendering
   integrations: [tailwind()],
   markdown: {
     shikiConfig: {
@@ -32,13 +33,21 @@ export default defineConfig({
     '/blog/rss': '/rss.xml',
     '/feed': '/rss.xml'
   },
+  // Add environment variables configuration
+  vite: {
+    define: {
+      'import.meta.env.SMTP_HOST': JSON.stringify(process.env.SMTP_HOST),
+      'import.meta.env.SMTP_PORT': JSON.stringify(process.env.SMTP_PORT),
+      'import.meta.env.SMTP_USER': JSON.stringify(process.env.SMTP_USER),
+      'import.meta.env.SMTP_PASS': JSON.stringify(process.env.SMTP_PASS),
+      'import.meta.env.CONTACT_EMAIL': JSON.stringify(process.env.CONTACT_EMAIL),
+      'import.meta.env.SITE_URL': JSON.stringify(process.env.SITE_URL),
+    }
+  },
   build: {
-    inlineStylesheets: 'auto'
+    inlineStylesheets: 'auto',
+    format: 'file'
   },
   // Add trailingSlash config to ensure consistent URL handling
-  trailingSlash: 'never',
-  // Add build.format to ensure consistent URL processing
-  build: {
-    format: 'file'
-  }
+  trailingSlash: 'never'
 });

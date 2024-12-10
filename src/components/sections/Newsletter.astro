@@ -1,40 +1,133 @@
 ---
+
 ---
 
 <section class="py-24 container-padding">
     <div class="max-container">
-        <div class="relative overflow-hidden rounded-2xl bg-base-darker/90 backdrop-blur-sm p-8 md:p-12">
+        <div
+            class="relative overflow-hidden rounded-2xl bg-base-darker/90 backdrop-blur-sm p-8 md:p-12"
+        >
             <div class="relative z-10 max-w-2xl mx-auto text-center">
                 <h2 class="text-4xl md:text-5xl font-bold mb-6">
                     Bleib auf dem Laufenden
                 </h2>
                 <p class="text-xl text-white/80 mb-8">
-                    Erhalte regelmäßig praktische Tipps, aktuelle Entwicklungen und exklusive Einblicke in die Welt der KI.
+                    Erhalte regelmäßig praktische Tipps, aktuelle Entwicklungen
+                    und exklusive Einblicke in die Welt der KI.
                 </p>
 
-                <form class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto" action="/api/newsletter" method="POST">
-                    <input 
-                        type="email" 
-                        name="email" 
-                        placeholder="Deine E-Mail-Adresse" 
+                <form
+                    id="newsletterForm"
+                    class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto"
+                    action="/api/newsletter"
+                    method="POST"
+                >
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Deine E-Mail-Adresse"
                         required
-                        class="flex-1 px-6 py-4 rounded-lg bg-base-darker/50 border border-white/10 
+                        class="flex-1 px-6 py-4 rounded-lg bg-base-darker/50 border border-white/10
                                placeholder:text-white/50 focus:outline-none focus:border-primary/50
                                backdrop-blur-sm"
                     />
-                    <button 
+                    <button
                         type="submit"
-                        class="px-8 py-4 bg-primary hover:bg-primary-dark rounded-lg font-medium 
-                               transition-colors duration-300 whitespace-nowrap"
+                        id="newsletterSubmit"
+                        class="px-8 py-4 bg-primary hover:bg-primary-dark rounded-lg font-medium
+                               transition-colors duration-300 whitespace-nowrap relative"
                     >
-                        Anmelden
+                        <span>Anmelden</span>
+                        <div
+                            class="hidden animate-spin inline-block w-4 h-4 border-2 border-white/20 border-t-white rounded-full ml-2"
+                        >
+                        </div>
                     </button>
                 </form>
 
+                <div id="newsletterMessage" class="hidden mt-4">
+                    <p class="text-sm px-4 py-2 rounded mx-auto max-w-xl"></p>
+                </div>
+
                 <p class="mt-4 text-sm text-white/60">
-                    Ich respektiere deine Privatsphäre. Abmeldung jederzeit möglich.
+                    Ich respektiere deine Privatsphäre. Abmeldung jederzeit
+                    möglich.
                 </p>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    // Get DOM elements with type assertions
+    const formEl = document.getElementById("newsletterForm");
+    const submitButtonEl = document.getElementById("newsletterSubmit");
+    const messageDivEl = document.getElementById("newsletterMessage");
+    const buttonTextEl = submitButtonEl?.querySelector("span");
+    const spinnerEl = submitButtonEl?.querySelector(".animate-spin");
+
+    // Type guard to ensure all elements exist
+    if (
+        !formEl ||
+        !submitButtonEl ||
+        !messageDivEl ||
+        !buttonTextEl ||
+        !spinnerEl
+    ) {
+        console.error("Required elements not found");
+        throw new Error("Required elements not found");
+    }
+
+    // After the check, we can safely assert these are the correct types
+    const form = formEl as HTMLFormElement;
+    const submitButton = submitButtonEl as HTMLButtonElement;
+    const messageDiv = messageDivEl as HTMLDivElement;
+    const buttonText = buttonTextEl as HTMLSpanElement;
+    const spinner = spinnerEl as HTMLDivElement;
+
+    function showMessage(message: string, isError: boolean = false) {
+        messageDiv.classList.remove("hidden");
+        const messageElement = messageDiv.querySelector("p");
+        if (!messageElement) return;
+
+        messageElement.textContent = message;
+        messageElement.className = `text-sm px-4 py-2 rounded mx-auto max-w-xl ${isError ? "bg-red-500/20 text-red-200" : "bg-green-500/20 text-green-200"}`;
+    }
+
+    function setLoading(loading: boolean) {
+        submitButton.disabled = loading;
+        buttonText.textContent = loading ? "Wird angemeldet..." : "Anmelden";
+        spinner.classList.toggle("hidden", !loading);
+        submitButton.classList.toggle("opacity-75", loading);
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        messageDiv.classList.add("hidden");
+
+        try {
+            const formData = new FormData(form);
+            const response = await fetch("/api/newsletter", {
+                method: "POST",
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showMessage(data.message);
+                form.reset();
+            } else {
+                showMessage(data.message, true);
+            }
+        } catch (error) {
+            showMessage(
+                "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+                true,
+            );
+        } finally {
+            setLoading(false);
+        }
+    });
+</script>
