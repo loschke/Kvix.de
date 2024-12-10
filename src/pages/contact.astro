@@ -1,5 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import Newsletter from "../components/sections/Newsletter.astro";
+
 ---
 
 <Layout
@@ -246,40 +248,40 @@ import Layout from "../layouts/Layout.astro";
                         class="text-accent hover:text-accent/80 text-lg font-medium
                                transition-colors duration-300"
                     >
-                        kontakt@kvix.de
+                        agent@kvix.de
                     </a>
                 </div>
 
                 <div>
-                    <h2 class="text-2xl font-bold mb-4">Websites & Projekte</h2>
+                    <h2 class="text-2xl font-bold mb-4">Wichtige Links</h2>
                     <ul class="space-y-6">
                         <li>
-                            <a href="https://kvix.de" class="block group">
+                            <a href="https://queonext.de/ai" class="block group">
                                 <span
                                     class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300"
                                 >
-                                    kvix.de
+                                    queonext AI-Hub
                                 </span>
                                 <span class="text-white/60 block mt-1"
-                                    >Hauptwebsite</span
+                                    >Meine Profession und Arbeitgeber</span
                                 >
                             </a>
                         </li>
                         <li>
-                            <a href="https://blog.kvix.de" class="block group">
+                            <a href="https://ai-design.guide" class="block group">
                                 <span
                                     class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300"
                                 >
-                                    blog.kvix.de
+                                    AI-Design Guide
                                 </span>
                                 <span class="text-white/60 block mt-1"
-                                    >Tech Blog</span
+                                    >Führender Leitfaden zum Thema AI-Design</span
                                 >
                             </a>
                         </li>
                         <li>
                             <a
-                                href="https://github.com/ricoloschke"
+                                href="https://helpbaer.de"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="block group"
@@ -287,10 +289,10 @@ import Layout from "../layouts/Layout.astro";
                                 <span
                                     class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300"
                                 >
-                                    GitHub
+                                    HelpBärAI
                                 </span>
                                 <span class="text-white/60 block mt-1"
-                                    >Open Source Projekte</span
+                                    >Demo Plattform zum Ausprobieren von KI-Assistenten</span
                                 >
                             </a>
                         </li>
@@ -299,4 +301,6 @@ import Layout from "../layouts/Layout.astro";
             </div>
         </div>
     </div>
+    <Newsletter />
 </Layout>
+

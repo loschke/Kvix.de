@@ -1,0 +1,53 @@
+---
+const publications = [
+    {
+        icon: "📘",
+        title: "AI-Design Guide",
+        url: "https://ai-design.guide",
+        description: "Ein praxisnaher Leitfaden, der meine Erfahrungen im KI-gestützten Design teilt"
+    },
+    {
+        icon: "📗",
+        title: "AI-Assistant Guide",
+        url: "https://ai-assistant.guide",
+        description: "Meine gesammelten Erkenntnisse zu effektivem Prompt Engineering"
+    },
+    {
+        icon: "📙",
+        title: "KI-Workflow Guide",
+        url: "#",
+        description: "Best Practices und Strategien für die Integration von KI in bestehende Arbeitsprozesse"
+    },
+    {
+        icon: "📔",
+        title: "Automation Guide",
+        url: "#",
+        description: "Praktische Anleitungen zur Entwicklung automatisierter KI-gestützter Workflows"
+    }
+];
+---
+
+<section class="py-24 px-8">
+    <div class="max-w-7xl mx-auto">
+        <h2 class="text-3xl font-bold mb-12 text-center">Meine AI-Tools und Guides</h2>
+        <div class="grid gap-6 md:grid-cols-2">
+            {publications.map((pub) => (
+                <a href={pub.url} target="_blank" rel="noopener noreferrer">
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:bg-white/10 transition-all">
+                        <div class="flex items-start gap-4">
+                            <span class="text-4xl">{pub.icon}</span>
+                            <div>
+                                <h3 class="text-xl font-bold text-white/90 mb-2">
+                                    {pub.title}
+                                </h3>
+                                <p class="text-white/70 leading-relaxed">
+                                    {pub.description}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </div>
+</section>
