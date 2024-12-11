@@ -5,16 +5,9 @@ const currentYear = new Date().getFullYear();
 
 const footerLinks = [
     {
-        title: "Navigation",
-        links: [
-            { label: "About", href: "/about" },
-            { label: "Blog", href: "/blog" },
-            { label: "Kontakt", href: "/kontakt" },
-        ],
-    },
-    {
         title: "Rechtliches",
         links: [
+            { label: "Kontakt", href: "/kontakt" },
             { label: "Impressum", href: "/impressum" },
             { label: "Datenschutz", href: "/datenschutz" },
             { label: "AGB", href: "/agb" },
@@ -24,8 +17,13 @@ const footerLinks = [
 ---
 
 <footer class="mt-32 relative">
-    <div class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-transparent via-base/30 to-base-darker/90"></div>
-    <div class="relative bg-gradient-to-b from-base-darker via-base-darker to-base-darkest shadow-2xl">
+    <div
+        class="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-transparent via-base/30 to-base-darker/90"
+    >
+    </div>
+    <div
+        class="relative bg-gradient-to-b from-base-darker via-base-darker to-base-darkest shadow-2xl"
+    >
         <div class="container-padding py-16">
             <div class="max-container">
                 <!-- Top Section -->
@@ -38,12 +36,13 @@ const footerLinks = [
                                 alt="Rico Loschke"
                                 class="w-12 h-12 rounded-full shadow-lg object-cover"
                             />
-                            <span class="text-xl font-medium">Rico Loschke</span>
+                            <span class="text-xl font-medium">Rico Loschke</span
+                            >
                         </div>
                         <p class="text-white/80 max-w-md mb-8">
                             Experte für künstliche Intelligenz und digitale
-                            Transformation. Ich unterstütze Unternehmen dabei, das
-                            volle Potenzial von KI zu erschließen.
+                            Transformation. Ich unterstütze Unternehmen dabei,
+                            das volle Potenzial von KI zu erschließen.
                         </p>
                         <div class="mb-8">
                             <SocialIcons />
@@ -75,7 +74,9 @@ const footerLinks = [
                 </div>
 
                 <!-- Bottom Section -->
-                <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div
+                    class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4"
+                >
                     <div class="text-white/60 text-sm">
                         © {currentYear} Rico Loschke. Alle Rechte vorbehalten.
                     </div>
