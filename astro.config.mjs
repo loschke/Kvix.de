@@ -1,9 +1,13 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
+import node from '@astrojs/node';
 
 export default defineConfig({
   site: 'https://kvix.de',
-  output: 'static', // Changed from 'hybrid' to 'static' for Astro 5 compatibility
+  output: 'static',
+  adapter: node({
+    mode: 'standalone'
+  }),
   integrations: [tailwind()],
   markdown: {
     shikiConfig: {
