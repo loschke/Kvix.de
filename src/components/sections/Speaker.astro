@@ -1,5 +1,9 @@
 ---
-
+import { Image } from "astro:assets";
+import ihkLogo from "../../assets/images/IHK.png";
+import haufeLogo from "../../assets/images/Haufe.png";
+import bitkomLogo from "../../assets/images/Bitkom.png";
+import speakerImage from "../../assets/images/rico-loschke_keynote_mobilecamp.jpg";
 ---
 
 <section class="py-40 container-padding bg-gray-50 dark:bg-gray-900/50">
@@ -31,23 +35,26 @@
                         Partnerakademien:
                     </h3>
                     <div class="flex gap-8 items-center">
-                        <img
-                            src="/images/IHK.png"
+                        <Image
+                            src={ihkLogo}
                             alt="IHK Logo"
                             class="w-44 h-auto object-contain rounded-lg"
-                            loading="lazy"
+                            width={176}
+                            height={88}
                         />
-                        <img
-                            src="/images/Haufe.png"
+                        <Image
+                            src={haufeLogo}
                             alt="Haufe Akademie Logo"
                             class="w-44 h-auto object-contain rounded-lg"
-                            loading="lazy"
+                            width={176}
+                            height={88}
                         />
-                        <img
-                            src="/images/Bitkom.png"
+                        <Image
+                            src={bitkomLogo}
                             alt="Bitkom Logo"
                             class="w-44 h-auto object-contain rounded-lg"
-                            loading="lazy"
+                            width={176}
+                            height={88}
                         />
                     </div>
                 </div>
@@ -55,11 +62,12 @@
 
             <div class="relative">
                 <div class="aspect-square rounded-2xl overflow-hidden">
-                    <img
-                        src="/images/rico-loschke_keynote_mobilecamp.jpg"
+                    <Image
+                        src={speakerImage}
                         alt="Rico Loschke als Keynote Speaker beim MobileCamp"
                         class="w-full h-full object-cover hover:scale-105 transition-all duration-700"
-                        loading="lazy"
+                        width={800}
+                        height={800}
                     />
                 </div>
                 <div

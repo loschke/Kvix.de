@@ -39,14 +39,22 @@ const resources: Resource[] = [
 ---
 
 <section class="py-24 px-8">
-    <div class="max-w-7xl mx-auto">
-        <h2 class="text-4xl font-bold mb-6 text-center">Meine KI-Projekte</h2>
-        <p class="text-white/70 text-center mb-12 max-w-2xl mx-auto">
-            Von KI-gestütztem Design bis zur Prozessautomatisierung - entdecke
-            meine praktischen Lösungen, die dir den Einstieg in die KI-Welt
-            erleichtern. Jedes Projekt ist aus der Praxis entstanden und zeigt
-            die vielfältigen Möglichkeiten generativer KI.
-        </p>
+    <div class="max-w-7xl mx-auto space-y-16">
+        <div class="text-center space-y-6">
+            <h2
+                class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-gray-100"
+            >
+                Portfolio & Projekte
+            </h2>
+            <p
+                class="text-lg md:text-xl text-gray-700 dark:text-gray-300 max-w-4xl mx-auto"
+            >
+                Von KI-gestütztem Design bis zur Prozessautomatisierung -
+                entdecke meine praktischen Lösungen, die dir den Einstieg in die
+                KI-Welt erleichtern. Jedes Projekt ist aus der Praxis entstanden
+                und zeigt die vielfältigen Möglichkeiten generativer KI.
+            </p>
+        </div>
         <div class="grid gap-8 md:grid-cols-2">
             {
                 resources.map((resource) => (

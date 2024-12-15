@@ -1,5 +1,7 @@
 ---
 import SocialIcons from "../navigation/SocialIcons.astro";
+import { Image } from "astro:assets";
+import avatarImage from "../../assets/images/rico-loschke_avatar.jpg";
 
 const navItems = [{ href: "/contact", label: "Anfrage" }];
 
@@ -21,10 +23,12 @@ const currentPath = Astro.url.pathname;
         <div class="max-container flex justify-between items-center">
             <!-- Profile Logo -->
             <a href="/" class="flex items-center gap-4 group relative">
-                <img
-                    src="/images/rico-loschke_avatar.jpg"
+                <Image
+                    src={avatarImage}
                     alt="Rico Loschke"
-                    class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary-dark shadow-lg object-cover"
+                    width={48}
+                    height={48}
+                    class="rounded-full bg-gradient-to-br from-primary to-primary-dark shadow-lg object-cover"
                     aria-hidden="true"
                 />
                 <span

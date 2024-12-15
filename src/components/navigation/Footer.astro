@@ -1,5 +1,7 @@
 ---
 import SocialIcons from "./SocialIcons.astro";
+import { Image } from "astro:assets";
+import avatarImage from "../../assets/images/rico-loschke_avatar.jpg";
 
 const currentYear = new Date().getFullYear();
 
@@ -66,10 +68,12 @@ const footerLinks: FooterSection[] = [
                     <!-- Brand -->
                     <div class="lg:col-span-2">
                         <div class="flex items-center gap-4 mb-4">
-                            <img
-                                src="/images/rico-loschke_avatar.jpg"
+                            <Image
+                                src={avatarImage}
                                 alt="Rico Loschke"
-                                class="w-12 h-12 rounded-full shadow-lg object-cover"
+                                width={48}
+                                height={48}
+                                class="rounded-full shadow-lg object-cover"
                             />
                             <span class="text-xl font-medium">Rico Loschke</span
                             >
