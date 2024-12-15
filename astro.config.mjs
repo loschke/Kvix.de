@@ -4,9 +4,10 @@ import node from '@astrojs/node';
 
 export default defineConfig({
   site: 'https://kvix.de',
-  output: 'static',
   adapter: node({
-    mode: 'standalone'
+    mode: 'standalone',
+    host: '0.0.0.0',
+    port: 4321
   }),
   integrations: [tailwind()],
   markdown: {
