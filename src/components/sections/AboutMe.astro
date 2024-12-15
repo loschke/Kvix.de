@@ -3,49 +3,58 @@ const motivations = [
     {
         icon: "💡",
         title: "Mein Antrieb",
-        description: "Seit 2021 fasziniert mich die Entwicklung von KI-Technologien. Was als technische Neugier begann, wurde schnell zu einer Mission: Menschen zu befähigen, diese Technologien sinnvoll und selbstbewusst zu nutzen."
+        description:
+            "Seit 2021 fasziniert mich die Entwicklung von KI-Technologien. Was als technische Neugier begann, wurde schnell zu einer Mission: Menschen zu befähigen, diese Technologien sinnvoll und selbstbewusst zu nutzen.",
     },
     {
         icon: "🎯",
         title: "Mein Ansatz",
-        description: "Ich glaube an einen bodenständigen, praxisorientierten Ansatz. Keine überzogenen Versprechen, sondern konkrete, umsetzbare Lösungen für echte Herausforderungen im Arbeitsalltag."
+        description:
+            "Ich glaube an einen bodenständigen, praxisorientierten Ansatz. Keine überzogenen Versprechen, sondern konkrete, umsetzbare Lösungen für echte Herausforderungen im Arbeitsalltag.",
     },
     {
         icon: "🌟",
         title: "Meine Vision",
-        description: "Die KI-Revolution wartet nicht - aber gemeinsam können wir sie aktiv gestalten. Mein Ziel ist es, eine Brücke zwischen komplexer Technologie und praktischer Anwendung zu bauen."
-    }
+        description:
+            "Die KI-Revolution wartet nicht - aber gemeinsam können wir sie aktiv gestalten. Mein Ziel ist es, eine Brücke zwischen komplexer Technologie und praktischer Anwendung zu bauen.",
+    },
 ];
 ---
 
 <section class="py-24 px-8">
     <div class="max-w-7xl mx-auto">
         <div class="text-center mb-16">
-            <h1 class="text-4xl md:text-5xl font-bold mb-6" transition:name="page-title">
-                Über <span class="text-primary">mich</span>
-            </h1>
+            <h2
+                class="text-4xl md:text-5xl font-bold mb-6"
+                transition:name="page-title"
+            >
+                About
+            </h2>
             <p class="text-xl text-white/80 max-w-2xl mx-auto">
-                Als Director Automation & AI bei queonext verbinde ich technisches Know-how mit der Leidenschaft, 
-                Menschen den Weg in die KI-gestützte Zukunft zu ebnen.
+                Als Director Automation & AI bei queonext verbinde ich
+                technisches Know-how mit der Leidenschaft, Menschen den Weg in
+                die KI-gestützte Zukunft zu ebnen.
             </p>
         </div>
 
         <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-16">
-            {motivations.map((item) => (
-                <div class="bg-white/5 p-6 rounded-xl border border-white/5">
-                    <div class="flex items-start gap-4">
-                        <span class="text-4xl">{item.icon}</span>
-                        <div>
-                            <h3 class="text-xl font-bold text-white/90 mb-2">
-                                {item.title}
-                            </h3>
-                            <p class="text-white/70 leading-relaxed">
-                                {item.description}
-                            </p>
+            {
+                motivations.map((item) => (
+                    <div class="bg-white/5 p-6 rounded-xl border border-white/5">
+                        <div class="flex items-start gap-4">
+                            <span class="text-4xl">{item.icon}</span>
+                            <div>
+                                <h3 class="text-xl font-bold text-white/90 mb-2">
+                                    {item.title}
+                                </h3>
+                                <p class="text-white/70 leading-relaxed">
+                                    {item.description}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))
+            }
         </div>
     </div>
 </section>

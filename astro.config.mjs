@@ -46,12 +46,48 @@ export default defineConfig({
       'import.meta.env.SMTP_PASS': JSON.stringify(process.env.SMTP_PASS),
       'import.meta.env.CONTACT_EMAIL': JSON.stringify(process.env.CONTACT_EMAIL),
       'import.meta.env.SITE_URL': JSON.stringify(process.env.SITE_URL),
+    },
+    build: {
+      // Enable asset optimization
+      assetsInlineLimit: 4096, // Inline assets smaller than 4kb
+      cssCodeSplit: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Split vendor chunks for better caching
+            vendor: [/node_modules/]
+          }
+        }
+      }
+    },
+    // Optimize images during dev
+    optimizeDeps: {
+      include: ['@astrojs/image']
     }
   },
   build: {
     inlineStylesheets: 'auto',
-    format: 'file'
+    format: 'file',
+    // Asset optimization
+    assets: 'assets',
+    // Enable image optimization
+    image: {
+      service: {
+        entrypoint: 'astro/assets/services/sharp'
+      },
+      // Default image optimization settings
+      defaultOptions: {
+        format: 'webp',
+        quality: 80,
+        widths: [640, 750, 828, 1080, 1200, 1920],
+        sizes: '(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 33vw',
+        loading: 'lazy',
+        decoding: 'async'
+      }
+    }
   },
   // Add trailingSlash config to ensure consistent URL handling
-  trailingSlash: 'never'
+  trailingSlash: 'never',
+  // Performance optimizations
+  compressHTML: true
 });

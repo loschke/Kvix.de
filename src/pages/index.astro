@@ -6,13 +6,67 @@ import Newsletter from "../components/sections/Newsletter.astro";
 import Expertise from "../components/sections/Expertise.astro";
 import AboutMe from "../components/sections/AboutMe.astro";
 import Speaker from "../components/sections/Speaker.astro";
+import Guides from "./guides.astro";
+import Resources from "~/components/sections/Resources.astro";
+
+const expertiseAreas = [
+    "Generative KI",
+    "Künstliche Intelligenz",
+    "Digitale Transformation",
+    "Automation",
+];
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://kvix.de/#rico",
+    name: "Rico Loschke",
+    jobTitle: "Director Automation & AI",
+    description:
+        "KI Experte mit Fokus auf generative KI und praktische Anwendungen in Unternehmen",
+    url: "https://kvix.de",
+    sameAs: ["https://www.linkedin.com/in/rico-loschke/"],
+    knowsAbout: expertiseAreas,
+    worksFor: {
+        "@type": "Organization",
+        name: "queonext GmbH",
+        url: "https://queonext.de",
+    },
+    offers: {
+        "@type": "Offer",
+        itemOffered: [
+            {
+                "@type": "Service",
+                name: "KI-Beratung",
+                description:
+                    "Strategische Beratung zur Integration von KI in Unternehmensprozesse",
+            },
+            {
+                "@type": "Service",
+                name: "Workshops",
+                description:
+                    "Praxisorientierte Workshops zu generativer KI und deren Anwendung",
+            },
+        ],
+    },
+};
 ---
 
-<Layout>
+<Layout
+    title="Rico Loschke - KI Experte | Generative KI & Digitale Transformation"
+    description="Rico Loschke ➤ Director Automation & AI bei queonext ✓ Experte für generative KI und deren praktische Anwendung ✓ Beratung & Workshops für Unternehmen"
+    article={{
+        publishedTime: new Date().toISOString(),
+        authors: ["Rico Loschke"],
+        tags: expertiseAreas,
+    }}
+>
     <Welcome />
     <AboutMe />
     <Speaker />
     <Technologies />
     <Expertise />
+    <Resources />
     <Newsletter />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </Layout>

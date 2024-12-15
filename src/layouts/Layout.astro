@@ -18,6 +18,7 @@ interface Props {
 	ogImage?: string;
 	canonicalURL?: string;
 	article?: ArticleMetadata;
+	noindex?: boolean;
 }
 
 const {
@@ -26,6 +27,7 @@ const {
 	ogImage,
 	canonicalURL,
 	article,
+	noindex = false,
 } = Astro.props;
 
 // Check if we're on the homepage
@@ -71,6 +73,9 @@ const jsonLd = {
 		url: "https://kvix.de",
 	},
 };
+
+// Determine if this is an error page (404 or 500)
+const isErrorPage = ["/404", "/500"].includes(currentPath);
 ---
 
 <!doctype html>
@@ -83,6 +88,7 @@ const jsonLd = {
 			title={title}
 			description={description}
 			canonical={finalCanonicalURL}
+			noindex={noindex || isErrorPage}
 			openGraph={{
 				basic: {
 					title,
@@ -112,7 +118,7 @@ const jsonLd = {
 			extend={{
 				meta: [
 					{ name: "theme-color", content: "#000000" },
-					{ name: "apple-mobile-web-app-capable", content: "yes" },
+					{ name: "display-mode", content: "standalone" },
 					{
 						name: "apple-mobile-web-app-status-bar-style",
 						content: "black",
@@ -123,6 +129,11 @@ const jsonLd = {
 						rel: "icon",
 						type: "image/svg+xml",
 						href: "/favicon.svg",
+					},
+					{
+						rel: "icon",
+						type: "image/x-icon",
+						href: "/favicon.ico",
 					},
 					{
 						rel: "preload",
@@ -140,6 +151,13 @@ const jsonLd = {
 
 		{/* Structured Data */}
 		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+		{/* Umami Analytics (cookieless) */}
+		<script
+			async
+			defer
+			data-website-id="c0442c57-4a05-4631-a4f0-e132ecbbbec0"
+			src="https://analytics.kvix.pro/script.js"></script>
 
 		<meta name="generator" content={Astro.generator} />
 

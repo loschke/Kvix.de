@@ -1,12 +1,33 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Newsletter from "../components/sections/Newsletter.astro";
 
+const contactJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Kontakt - Rico Loschke",
+    description:
+        "Kontaktieren Sie KI-Experte Rico Loschke für Ihre Projekte und Anfragen im Bereich künstliche Intelligenz",
+    mainEntity: {
+        "@type": "Person",
+        "@id": "https://kvix.de/#rico",
+        name: "Rico Loschke",
+        jobTitle: "Director Automation & AI",
+        email: "agent@kvix.de",
+        url: "https://kvix.de",
+        sameAs: ["https://www.linkedin.com/in/rico-loschke/"],
+        contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "Geschäftlich",
+            email: "agent@kvix.de",
+            availableLanguage: ["German", "English"],
+        },
+    },
+};
 ---
 
 <Layout
-    title="Kontakt - Rico Loschke"
-    description="Kontaktieren Sie mich für Fragen, Projektanfragen oder Zusammenarbeit im Bereich KI und Softwareentwicklung."
+    title="Kontakt - Rico Loschke | KI-Experte & Berater"
+    description="✓ Direkter Kontakt zu KI-Experte Rico Loschke ✓ Beratung für KI-Integration & digitale Transformation ✓ Workshops & Vorträge ➤ Jetzt anfragen!"
 >
     <div class="max-w-[1200px] mx-auto px-4 sm:px-6 py-12">
         <div class="text-center mb-16">
@@ -163,7 +184,11 @@ import Newsletter from "../components/sections/Newsletter.astro";
                         if (!messageElement) return;
 
                         messageElement.textContent = message;
-                        messageElement.className = `text-sm px-4 py-2 rounded ${isError ? "bg-red-500/20 text-red-200" : "bg-green-500/20 text-green-200"}`;
+                        messageElement.className = `text-sm px-4 py-2 rounded ${
+                            isError
+                                ? "bg-red-500/20 text-red-200"
+                                : "bg-green-500/20 text-green-200"
+                        }`;
                     }
 
                     function setLoading(loading: boolean) {
@@ -244,7 +269,7 @@ import Newsletter from "../components/sections/Newsletter.astro";
                 <div class="mb-12">
                     <h2 class="text-2xl font-bold mb-4">E-Mail</h2>
                     <a
-                        href="mailto:kontakt@kvix.de"
+                        href="mailto:agent@kvix.de"
                         class="text-accent hover:text-accent/80 text-lg font-medium
                                transition-colors duration-300"
                     >
@@ -256,7 +281,10 @@ import Newsletter from "../components/sections/Newsletter.astro";
                     <h2 class="text-2xl font-bold mb-4">Wichtige Links</h2>
                     <ul class="space-y-6">
                         <li>
-                            <a href="https://queonext.de/ai" class="block group">
+                            <a
+                                href="https://queonext.de/ai"
+                                class="block group"
+                            >
                                 <span
                                     class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300"
                                 >
@@ -268,7 +296,10 @@ import Newsletter from "../components/sections/Newsletter.astro";
                             </a>
                         </li>
                         <li>
-                            <a href="https://ai-design.guide" class="block group">
+                            <a
+                                href="https://ai-design.guide"
+                                class="block group"
+                            >
                                 <span
                                     class="text-accent group-hover:text-accent/80 font-medium transition-colors duration-300"
                                 >
@@ -292,7 +323,8 @@ import Newsletter from "../components/sections/Newsletter.astro";
                                     HelpBärAI
                                 </span>
                                 <span class="text-white/60 block mt-1"
-                                    >Demo Plattform zum Ausprobieren von KI-Assistenten</span
+                                    >Demo Plattform zum Ausprobieren von
+                                    KI-Assistenten</span
                                 >
                             </a>
                         </li>
@@ -301,6 +333,9 @@ import Newsletter from "../components/sections/Newsletter.astro";
             </div>
         </div>
     </div>
-    <Newsletter />
-</Layout>
 
+    <script
+        type="application/ld+json"
+        set:html={JSON.stringify(contactJsonLd)}
+    />
+</Layout>

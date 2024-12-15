@@ -1,53 +1,97 @@
 ---
-const publications = [
+interface Resource {
+    icon: string;
+    title: string;
+    url: string;
+    description: string;
+}
+
+const resources: Resource[] = [
     {
-        icon: "📘",
-        title: "AI-Design Guide",
+        icon: "💡",
+        title: "queonext",
+        url: "https://queonext.de/ai",
+        description:
+            "Als Director Automation & AI entwickle ich gemeinsam mit unserem Team KI-Strategien und setzen diese in konkrete Lösungen um. Wir integrieren generative KI in deine Unternehmensprozesse und gestalten die digitale Transformation.",
+    },
+    {
+        icon: "🐻",
+        title: "PromptBär",
+        url: "https://promptbaer.de",
+        description:
+            "Meine Sammlung von Prompt-Formeln und Beispielbildern, entstanden aus echten Anwendungsfällen unseres Agenturalltags. Mit dieser Bibliothek kannst du schnell und effizient KI-Visuals für deine Marketing-Anforderungen erstellen.",
+    },
+    {
+        icon: "🐼",
+        title: "Helpbär",
+        url: "https://helpbaer.de",
+        description:
+            "Eine kostenlose und interaktivePlattform zum Ausprobieren verschiedener KI-Assistenten für Konzept, Content, Social Media und Kreation - finde den perfekten KI-Assistenten für deine Anforderungen.",
+    },
+    {
+        icon: "🎨",
+        title: "AI-Design.Guide",
         url: "https://ai-design.guide",
-        description: "Ein praxisnaher Leitfaden, der meine Erfahrungen im KI-gestützten Design teilt"
+        description:
+            "In diesem Leitfaden teile ich mein praktisches Wissen zu KI-Design und KI-Fotografie. Entdecke Tutorials, Prompts und Techniken, die dir den Einstieg in KI-gestütztes Design erleichtern und deine kreativen Möglichkeiten erweitern.",
     },
-    {
-        icon: "📗",
-        title: "AI-Assistant Guide",
-        url: "https://ai-assistant.guide",
-        description: "Meine gesammelten Erkenntnisse zu effektivem Prompt Engineering"
-    },
-    {
-        icon: "📙",
-        title: "KI-Workflow Guide",
-        url: "#",
-        description: "Best Practices und Strategien für die Integration von KI in bestehende Arbeitsprozesse"
-    },
-    {
-        icon: "📔",
-        title: "Automation Guide",
-        url: "#",
-        description: "Praktische Anleitungen zur Entwicklung automatisierter KI-gestützter Workflows"
-    }
 ];
 ---
 
 <section class="py-24 px-8">
     <div class="max-w-7xl mx-auto">
-        <h2 class="text-3xl font-bold mb-12 text-center">Meine AI-Tools und Guides</h2>
-        <div class="grid gap-6 md:grid-cols-2">
-            {publications.map((pub) => (
-                <a href={pub.url} target="_blank" rel="noopener noreferrer">
-                    <div class="bg-white/5 p-6 rounded-xl border border-white/5 hover:bg-white/10 transition-all">
-                        <div class="flex items-start gap-4">
-                            <span class="text-4xl">{pub.icon}</span>
-                            <div>
-                                <h3 class="text-xl font-bold text-white/90 mb-2">
-                                    {pub.title}
-                                </h3>
-                                <p class="text-white/70 leading-relaxed">
-                                    {pub.description}
-                                </p>
+        <h2 class="text-4xl font-bold mb-6 text-center">Meine KI-Projekte</h2>
+        <p class="text-white/70 text-center mb-12 max-w-2xl mx-auto">
+            Von KI-gestütztem Design bis zur Prozessautomatisierung - entdecke
+            meine praktischen Lösungen, die dir den Einstieg in die KI-Welt
+            erleichtern. Jedes Projekt ist aus der Praxis entstanden und zeigt
+            die vielfältigen Möglichkeiten generativer KI.
+        </p>
+        <div class="grid gap-8 md:grid-cols-2">
+            {
+                resources.map((resource) => (
+                    <a
+                        href={resource.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="block group hover:-translate-y-1 transition-transform duration-300"
+                    >
+                        <div class="bg-white/5 p-8 rounded-2xl border border-white/10 hover:bg-white/10 transition-all">
+                            <div class="flex items-start gap-6">
+                                <span class="text-5xl">{resource.icon}</span>
+                                <div>
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <h3 class="text-2xl font-bold text-white/90">
+                                            {resource.title}
+                                        </h3>
+                                        <svg
+                                            class="w-5 h-5 text-white/50 group-hover:text-white/90"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="2"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                        >
+                                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                            <polyline points="15 3 21 3 21 9" />
+                                            <line
+                                                x1="10"
+                                                y1="14"
+                                                x2="21"
+                                                y2="3"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <p class="text-white/70 leading-relaxed">
+                                        {resource.description}
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </a>
-            ))}
+                    </a>
+                ))
+            }
         </div>
     </div>
 </section>

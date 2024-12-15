@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow utility pages
+Disallow: /404
+Disallow: /500
+
+# Sitemap
+Sitemap: https://kvix.de/sitemap.xml
